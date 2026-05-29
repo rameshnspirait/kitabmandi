@@ -3,10 +3,8 @@ import 'package:get/get.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:google_sign_in/google_sign_in.dart';
-import 'package:hive/hive.dart';
 import 'package:kitab_mandi/core/constants/app_color.dart';
 import 'package:kitab_mandi/core/controller/location_controller.dart';
-import 'package:kitab_mandi/core/storage/location_storage.dart';
 import 'package:kitab_mandi/routes/app_routes.dart';
 import 'package:kitab_mandi/widgets/app_button.dart';
 import '../../../core/utils/app_snackbar.dart';
@@ -169,12 +167,7 @@ class AuthController extends GetxController {
         return;
       }
 
-      ///  GET LOCATION CONTROLLER
-
       /// DETECT LOCATION ONLY IF NOT ALREADY SELECTED
-      if (locationController.selectedLocations.isEmpty) {
-        locationController.loadInitialData();
-      }
 
       ///  SAVE USER DATA + LOCATION
       await _firestore.collection('users').doc(user.uid).set({
@@ -192,6 +185,7 @@ class AuthController extends GetxController {
       // AppSnackbar.success("Signup successful 🚀");
       clearAllFields();
       isLogin.value = true;
+      await locationController.initLocation(isNewUser: true);
 
       /// 🚀 NAVIGATE AFTER EVERYTHING DONE
       Get.offAllNamed(AppRoutes.wrapper);
@@ -246,9 +240,13 @@ class AuthController extends GetxController {
       );
 
       /// LOAD LOCATION ONLY IF NOT ALREADY SELECTED
-      if (locationController.selectedLocations.isEmpty) {
-        locationController.loadInitialData();
-      }
+      final doc = await _firestore
+          .collection('users')
+          .doc(_auth.currentUser!.uid)
+          .get();
+      final isNewUser = !doc.exists;
+      await locationController.initLocation(isNewUser: isNewUser);
+
       // Get.offAllNamed(AppRoutes.wrapper);
       clearAllFields();
     } on FirebaseAuthException catch (e) {
@@ -291,9 +289,14 @@ class AuthController extends GetxController {
       // EXISTING USER
       if (doc.exists && (doc.data()?["phone"] ?? "").toString().isNotEmpty) {
         /// LOAD LOCATION ONLY IF NOT ALREADY SELECTED
-        if (locationController.selectedLocations.isEmpty) {
-          locationController.loadInitialData();
-        }
+        final doc = await _firestore
+            .collection('users')
+            .doc(_auth.currentUser!.uid)
+            .get();
+
+        final isNewUser = !doc.exists;
+
+        await locationController.initLocation(isNewUser: isNewUser);
         clearAllFields();
         Get.offAllNamed(AppRoutes.wrapper);
         return;

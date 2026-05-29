@@ -15,17 +15,25 @@ class LocationController extends GetxController {
   @override
   void onInit() {
     super.onInit();
-    loadInitialData();
+    initLocation(isNewUser: false);
   }
 
   /// 🔥 LOAD SAVED DATA
-  void loadInitialData() {
-    selectedLocations.value = LocationStorage.getSelected();
-    recentLocations.value = LocationStorage.getRecent();
+  Future<void> initLocation({required bool isNewUser}) async {
+    /// 1. Load from cache
     final saved = LocationStorage.getLocationData();
-    if (saved != null) {
+    final selected = LocationStorage.getSelected();
+    if (saved != null && selected.isNotEmpty) {
+      ///  USE CACHED (FAST - OLX STYLE)
+      selectedLocations.value = selected;
       latitude.value = (saved['latitude'] ?? 0.0).toDouble();
       longitude.value = (saved['longitude'] ?? 0.0).toDouble();
+      return;
+    }
+
+    /// 2. If NEW USER → detect automatically
+    if (isNewUser) {
+      await detectCurrentLocation();
     }
   }
 
@@ -52,7 +60,6 @@ class LocationController extends GetxController {
         longitude.value = (location['longitude'] ?? 0.0).toDouble();
       }
     } catch (e) {
-      print("❌ Location Error: $e");
       selectedLocations.value = ["Location Error"];
     } finally {
       isLoadingLocation.value = false;

@@ -9,7 +9,7 @@
           "id": "engineering",
           "name": "Engineering",
           "children": [
-            { "id": "cse", "name": "Computer Science" },
+            { "id": "cse", "name": "CSE" },
             { "id": "ece", "name": "Electronics" },
             { "id": "mech", "name": "Mechanical" },
             { "id": "civil", "name": "Civil" }

@@ -26,8 +26,7 @@ class HomeView extends StatelessWidget {
 
   final homeCtrl = Get.put(HomeController());
   final filterCtrl = Get.put(FilterController());
-  final locationCtrl = Get.put(LocationController());
-
+  final locationCtrl = Get.find<LocationController>();
   final RxInt currentBanner = 0.obs;
   final RxList categoriesData = [].obs;
 
@@ -84,13 +83,6 @@ class HomeView extends StatelessWidget {
     );
   }
 
-  String _getDisplayLocation(LocationController controller) {
-    if (controller.selectedLocations.isNotEmpty) {
-      return controller.selectedLocations.first;
-    }
-    return "Select City";
-  }
-
   Color _background(BuildContext context) {
     final isDark = Theme.of(context).brightness == Brightness.dark;
     return isDark ? const Color(0xFF1A1D23) : const Color(0xFFFFFFFF);
@@ -117,8 +109,6 @@ class HomeView extends StatelessWidget {
 
     final primaryText = isDark ? Colors.white : const Color(0xFF111827);
 
-    // final secondaryText = isDark ? Colors.white70 : Colors.black54;
-
     final borderColor = isDark ? Colors.white10 : Colors.black12;
 
     return Scaffold(
@@ -137,8 +127,6 @@ class HomeView extends StatelessWidget {
             /// FIXED OVERFLOW
             Expanded(
               child: Obx(() {
-                final location = _getDisplayLocation(locationCtrl);
-
                 return GestureDetector(
                   onTap: () => _openLocationSheet(context),
 
@@ -146,7 +134,9 @@ class HomeView extends StatelessWidget {
                     children: [
                       Flexible(
                         child: Text(
-                          location,
+                          locationCtrl.selectedLocations.isEmpty
+                              ? "Select Location"
+                              : locationCtrl.selectedLocations.join(", "),
                           maxLines: 1,
                           overflow: TextOverflow.ellipsis,
 
@@ -263,27 +253,6 @@ class HomeView extends StatelessWidget {
             );
           }
 
-          /// ================= EMPTY =================
-          // if (homeCtrl.filteredListings.isEmpty) {
-          //   return ListView(
-          //     physics: const AlwaysScrollableScrollPhysics(),
-
-          //     children: [
-          //       SizedBox(height: Get.height * 0.3),
-
-          //       Center(
-          //         child: Text(
-          //           "No listings found 😔",
-
-          //           style: theme.textTheme.titleMedium?.copyWith(
-          //             color: primaryText,
-          //           ),
-          //         ),
-          //       ),
-          //     ],
-          //   );
-          // }
-
           /// ================= MAIN UI =================
           return ListView(
             physics: const BouncingScrollPhysics(),
@@ -295,7 +264,6 @@ class HomeView extends StatelessWidget {
               /// ================= BANNER =================
               CarouselSlider.builder(
                 itemCount: bannerImages.length,
-
                 options: CarouselOptions(
                   height: isTablet ? 260 : 190,
                   autoPlay: true,
@@ -507,11 +475,9 @@ class HomeView extends StatelessWidget {
                     physics: const BouncingScrollPhysics(),
                     scrollDirection: Axis.horizontal,
                     separatorBuilder: (_, __) => const SizedBox(width: 10),
-                    itemCount: categoriesData.length,
-
+                    itemCount: 8,
                     itemBuilder: (_, index) {
                       final category = categoriesData[index];
-
                       return GestureDetector(
                         onTap: () {
                           Get.to(
