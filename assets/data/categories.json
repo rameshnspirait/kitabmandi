@@ -1,0 +1,454 @@
+{
+  "categories": [
+    {
+      "id": "books_academic",
+      "name": "Academic Books",
+      "icon": "book",
+      "subcategories": [
+        {
+          "id": "engineering",
+          "name": "Engineering",
+          "children": [
+            { "id": "cse", "name": "Computer Science" },
+            { "id": "ece", "name": "Electronics" },
+            { "id": "mech", "name": "Mechanical" },
+            { "id": "civil", "name": "Civil" }
+          ]
+        },
+        {
+          "id": "medical",
+          "name": "Medical",
+          "children": [
+            { "id": "mbbs", "name": "MBBS" },
+            { "id": "bds", "name": "BDS" },
+            { "id": "nursing", "name": "Nursing" }
+          ]
+        },
+        {
+          "id": "commerce",
+          "name": "Commerce",
+          "children": [
+            { "id": "bcom", "name": "B.Com" },
+            { "id": "mcom", "name": "M.Com" },
+            { "id": "ca", "name": "CA" }
+          ]
+        },
+        {
+          "id": "arts",
+          "name": "Arts & Humanities",
+          "children": []
+        }
+      ]
+    },
+    {
+      "id": "school_books",
+      "name": "School Books",
+      "icon": "school",
+      "subcategories": [
+        {
+          "id": "cbse",
+          "name": "CBSE",
+          "children": [
+            { "id": "nursery", "name": "Nursery" },
+            { "id": "lkg", "name": "LKG" },
+            { "id": "ukg", "name": "UKG" },
+
+            { "id": "class_1", "name": "Class 1" },
+            { "id": "class_2", "name": "Class 2" },
+            { "id": "class_3", "name": "Class 3" },
+            { "id": "class_4", "name": "Class 4" },
+            { "id": "class_5", "name": "Class 5" },
+
+            { "id": "class_6", "name": "Class 6" },
+            { "id": "class_7", "name": "Class 7" },
+            { "id": "class_8", "name": "Class 8" },
+
+            { "id": "class_9", "name": "Class 9" },
+            { "id": "class_10", "name": "Class 10" },
+
+            { "id": "class_11", "name": "Class 11" },
+            { "id": "class_12", "name": "Class 12" }
+          ]
+        },
+        {
+          "id": "icse",
+          "name": "ICSE",
+          "children": [
+            { "id": "nursery", "name": "Nursery" },
+            { "id": "lkg", "name": "LKG" },
+            { "id": "ukg", "name": "UKG" },
+
+            { "id": "class_1", "name": "Class 1" },
+            { "id": "class_2", "name": "Class 2" },
+            { "id": "class_3", "name": "Class 3" },
+            { "id": "class_4", "name": "Class 4" },
+            { "id": "class_5", "name": "Class 5" },
+
+            { "id": "class_6", "name": "Class 6" },
+            { "id": "class_7", "name": "Class 7" },
+            { "id": "class_8", "name": "Class 8" },
+
+            { "id": "class_9", "name": "Class 9" },
+            { "id": "class_10", "name": "Class 10" },
+
+            { "id": "class_11", "name": "Class 11" },
+            { "id": "class_12", "name": "Class 12" }
+          ]
+        },
+        {
+          "id": "state_board",
+          "name": "State Board",
+          "children": [
+            { "id": "nursery", "name": "Nursery" },
+            { "id": "lkg", "name": "LKG" },
+            { "id": "ukg", "name": "UKG" },
+
+            { "id": "class_1", "name": "Class 1" },
+            { "id": "class_2", "name": "Class 2" },
+            { "id": "class_3", "name": "Class 3" },
+            { "id": "class_4", "name": "Class 4" },
+            { "id": "class_5", "name": "Class 5" },
+
+            { "id": "class_6", "name": "Class 6" },
+            { "id": "class_7", "name": "Class 7" },
+            { "id": "class_8", "name": "Class 8" },
+
+            { "id": "class_9", "name": "Class 9" },
+            { "id": "class_10", "name": "Class 10" },
+
+            { "id": "class_11", "name": "Class 11" },
+            { "id": "class_12", "name": "Class 12" }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "academic_notes",
+      "name": "Academic Notes",
+      "icon": "academic",
+      "subcategories": [
+        {
+          "id": "cbse",
+          "name": "CBSE",
+          "children": [
+            { "id": "nursery", "name": "Nursery" },
+            { "id": "lkg", "name": "LKG" },
+            { "id": "ukg", "name": "UKG" },
+
+            { "id": "class_1", "name": "Class 1" },
+            { "id": "class_2", "name": "Class 2" },
+            { "id": "class_3", "name": "Class 3" },
+            { "id": "class_4", "name": "Class 4" },
+            { "id": "class_5", "name": "Class 5" },
+
+            { "id": "class_6", "name": "Class 6" },
+            { "id": "class_7", "name": "Class 7" },
+            { "id": "class_8", "name": "Class 8" },
+
+            { "id": "class_9", "name": "Class 9" },
+            { "id": "class_10", "name": "Class 10" },
+
+            { "id": "class_11", "name": "Class 11" },
+            { "id": "class_12", "name": "Class 12" }
+          ]
+        },
+        {
+          "id": "icse",
+          "name": "ICSE",
+          "children": [
+            { "id": "nursery", "name": "Nursery" },
+            { "id": "lkg", "name": "LKG" },
+            { "id": "ukg", "name": "UKG" },
+
+            { "id": "class_1", "name": "Class 1" },
+            { "id": "class_2", "name": "Class 2" },
+            { "id": "class_3", "name": "Class 3" },
+            { "id": "class_4", "name": "Class 4" },
+            { "id": "class_5", "name": "Class 5" },
+
+            { "id": "class_6", "name": "Class 6" },
+            { "id": "class_7", "name": "Class 7" },
+            { "id": "class_8", "name": "Class 8" },
+
+            { "id": "class_9", "name": "Class 9" },
+            { "id": "class_10", "name": "Class 10" },
+
+            { "id": "class_11", "name": "Class 11" },
+            { "id": "class_12", "name": "Class 12" }
+          ]
+        },
+        {
+          "id": "state_board",
+          "name": "State Board",
+          "children": [
+            { "id": "nursery", "name": "Nursery" },
+            { "id": "lkg", "name": "LKG" },
+            { "id": "ukg", "name": "UKG" },
+
+            { "id": "class_1", "name": "Class 1" },
+            { "id": "class_2", "name": "Class 2" },
+            { "id": "class_3", "name": "Class 3" },
+            { "id": "class_4", "name": "Class 4" },
+            { "id": "class_5", "name": "Class 5" },
+
+            { "id": "class_6", "name": "Class 6" },
+            { "id": "class_7", "name": "Class 7" },
+            { "id": "class_8", "name": "Class 8" },
+
+            { "id": "class_9", "name": "Class 9" },
+            { "id": "class_10", "name": "Class 10" },
+
+            { "id": "class_11", "name": "Class 11" },
+            { "id": "class_12", "name": "Class 12" }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "school_notes",
+      "name": "School Notes",
+      "icon": "school",
+      "subcategories": [
+        {
+          "id": "cbse",
+          "name": "CBSE",
+          "children": [
+            { "id": "nursery", "name": "Nursery" },
+            { "id": "lkg", "name": "LKG" },
+            { "id": "ukg", "name": "UKG" },
+
+            { "id": "class_1", "name": "Class 1" },
+            { "id": "class_2", "name": "Class 2" },
+            { "id": "class_3", "name": "Class 3" },
+            { "id": "class_4", "name": "Class 4" },
+            { "id": "class_5", "name": "Class 5" },
+
+            { "id": "class_6", "name": "Class 6" },
+            { "id": "class_7", "name": "Class 7" },
+            { "id": "class_8", "name": "Class 8" },
+
+            { "id": "class_9", "name": "Class 9" },
+            { "id": "class_10", "name": "Class 10" },
+
+            { "id": "class_11", "name": "Class 11" },
+            { "id": "class_12", "name": "Class 12" }
+          ]
+        },
+        {
+          "id": "icse",
+          "name": "ICSE",
+          "children": [
+            { "id": "nursery", "name": "Nursery" },
+            { "id": "lkg", "name": "LKG" },
+            { "id": "ukg", "name": "UKG" },
+
+            { "id": "class_1", "name": "Class 1" },
+            { "id": "class_2", "name": "Class 2" },
+            { "id": "class_3", "name": "Class 3" },
+            { "id": "class_4", "name": "Class 4" },
+            { "id": "class_5", "name": "Class 5" },
+
+            { "id": "class_6", "name": "Class 6" },
+            { "id": "class_7", "name": "Class 7" },
+            { "id": "class_8", "name": "Class 8" },
+
+            { "id": "class_9", "name": "Class 9" },
+            { "id": "class_10", "name": "Class 10" },
+
+            { "id": "class_11", "name": "Class 11" },
+            { "id": "class_12", "name": "Class 12" }
+          ]
+        },
+        {
+          "id": "state_board",
+          "name": "State Board",
+          "children": [
+            { "id": "nursery", "name": "Nursery" },
+            { "id": "lkg", "name": "LKG" },
+            { "id": "ukg", "name": "UKG" },
+
+            { "id": "class_1", "name": "Class 1" },
+            { "id": "class_2", "name": "Class 2" },
+            { "id": "class_3", "name": "Class 3" },
+            { "id": "class_4", "name": "Class 4" },
+            { "id": "class_5", "name": "Class 5" },
+
+            { "id": "class_6", "name": "Class 6" },
+            { "id": "class_7", "name": "Class 7" },
+            { "id": "class_8", "name": "Class 8" },
+
+            { "id": "class_9", "name": "Class 9" },
+            { "id": "class_10", "name": "Class 10" },
+
+            { "id": "class_11", "name": "Class 11" },
+            { "id": "class_12", "name": "Class 12" }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "magazines",
+      "name": "Magazines",
+      "icon": "magazine",
+      "subcategories": [
+        {
+          "id": "education_magazines",
+          "name": "Educational",
+          "children": [
+            { "id": "science_mag", "name": "Science" },
+            { "id": "tech_mag", "name": "Technology" },
+            { "id": "current_affairs", "name": "Current Affairs" }
+          ]
+        },
+        {
+          "id": "competitive_magazines",
+          "name": "Competitive Exams",
+          "children": [
+            { "id": "upsc_mag", "name": "UPSC" },
+            { "id": "ssc_mag", "name": "SSC" },
+            { "id": "banking_mag", "name": "Banking" }
+          ]
+        },
+        {
+          "id": "lifestyle_magazines",
+          "name": "Lifestyle",
+          "children": [
+            { "id": "fashion_mag", "name": "Fashion" },
+            { "id": "health_mag", "name": "Health & Fitness" },
+            { "id": "travel_mag", "name": "Travel" }
+          ]
+        },
+        {
+          "id": "kids_magazines",
+          "name": "Kids",
+          "children": [
+            { "id": "comics", "name": "Comics" },
+            { "id": "story_mag", "name": "Story Books" }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "competitive_exams",
+      "name": "Competitive Exams",
+      "icon": "trophy",
+      "subcategories": [
+        {
+          "id": "engineering_exams",
+          "name": "Engineering Exams",
+          "children": [
+            { "id": "jee", "name": "JEE" },
+            { "id": "gate", "name": "GATE" }
+          ]
+        },
+        {
+          "id": "medical_exams",
+          "name": "Medical Exams",
+          "children": [{ "id": "neet", "name": "NEET" }]
+        },
+        {
+          "id": "government_jobs",
+          "name": "Government Jobs",
+          "children": [
+            { "id": "upsc", "name": "UPSC" },
+            { "id": "ssc", "name": "SSC" },
+            { "id": "railway", "name": "Railway" },
+            { "id": "banking", "name": "Banking" }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "notes_material",
+      "name": "Notes & Study Material",
+      "icon": "note",
+      "subcategories": [
+        {
+          "id": "handwritten",
+          "name": "Handwritten Notes",
+          "children": []
+        },
+        {
+          "id": "printed",
+          "name": "Printed Notes",
+          "children": []
+        },
+        {
+          "id": "assignments",
+          "name": "Assignments",
+          "children": []
+        },
+        {
+          "id": "question_papers",
+          "name": "Previous Papers",
+          "children": []
+        }
+      ]
+    },
+    {
+      "id": "stationery",
+      "name": "Stationery",
+      "icon": "pen",
+      "subcategories": [
+        {
+          "id": "writing",
+          "name": "Writing Supplies",
+          "children": [
+            { "id": "pens", "name": "Pens" },
+            { "id": "pencils", "name": "Pencils" },
+            { "id": "markers", "name": "Markers" }
+          ]
+        },
+        {
+          "id": "notebooks",
+          "name": "Notebooks & Diaries",
+          "children": []
+        },
+        {
+          "id": "files",
+          "name": "Files & Folders",
+          "children": []
+        }
+      ]
+    },
+    {
+      "id": "electronics",
+      "name": "Electronics",
+      "icon": "laptop",
+      "subcategories": [
+        {
+          "id": "laptops",
+          "name": "Laptops",
+          "children": []
+        },
+        {
+          "id": "mobiles",
+          "name": "Mobile Phones",
+          "children": []
+        },
+        {
+          "id": "calculator",
+          "name": "Calculators",
+          "children": []
+        }
+      ]
+    },
+    {
+      "id": "others",
+      "name": "Others",
+      "icon": "more",
+      "subcategories": [
+        {
+          "id": "bags",
+          "name": "Bags",
+          "children": []
+        },
+        {
+          "id": "lab_equipment",
+          "name": "Lab Equipment",
+          "children": []
+        }
+      ]
+    }
+  ]
+}
