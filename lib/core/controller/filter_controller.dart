@@ -73,67 +73,67 @@ class FilterController extends GetxController {
   }
 
   /// ================= APPLY FILTER =================
-  void applyFilters() {
-    final homeController = Get.find<HomeController>();
+  // void applyFilters() {
+  //   final homeController = Get.find<HomeController>();
 
-    final filtered = homeController.listings.where((item) {
-      /// CATEGORY FILTER
-      if (selectedCategory.value.isNotEmpty &&
-          item.category['name'] != selectedCategory.value) {
-        return false;
-      }
+  //   final filtered = homeController.listings.where((item) {
+  //     /// CATEGORY FILTER
+  //     if (selectedCategory.value.isNotEmpty &&
+  //         item.category['name'] != selectedCategory.value) {
+  //       return false;
+  //     }
 
-      /// SUB CATEGORY FILTER
-      if (selectedSubCategory.value.isNotEmpty &&
-          item.category['subCategory'] != selectedSubCategory.value) {
-        return false;
-      }
+  //     /// SUB CATEGORY FILTER
+  //     if (selectedSubCategory.value.isNotEmpty &&
+  //         item.category['subCategory'] != selectedSubCategory.value) {
+  //       return false;
+  //     }
 
-      /// TYPE FILTER
-      if (selectedType.value.isNotEmpty &&
-          item.category['type'] != selectedType.value) {
-        return false;
-      }
+  //     /// TYPE FILTER
+  //     if (selectedType.value.isNotEmpty &&
+  //         item.category['type'] != selectedType.value) {
+  //       return false;
+  //     }
 
-      /// PRICE FILTER
-      final price = (item.price).toDouble();
-      if (price < minPrice.value || price > maxPrice.value) {
-        return false;
-      }
+  //     /// PRICE FILTER
+  //     final price = (item.price).toDouble();
+  //     if (price < minPrice.value || price > maxPrice.value) {
+  //       return false;
+  //     }
 
-      /// CONDITION FILTER
-      if (selectedConditions.isNotEmpty &&
-          !selectedConditions.contains(item.condition)) {
-        return false;
-      }
+  //     /// CONDITION FILTER
+  //     if (selectedConditions.isNotEmpty &&
+  //         !selectedConditions.contains(item.condition)) {
+  //       return false;
+  //     }
 
-      /// DISTANCE FILTER (optional)
-      if (selectedDistanceKm.value > 0) {
-        final distance = item.distanceKm ?? 0.0;
-        if (distance > selectedDistanceKm.value) {
-          return false;
-        }
-      }
+  //     /// DISTANCE FILTER (optional)
+  //     if (selectedDistanceKm.value > 0) {
+  //       final distance = item.distanceKm ?? 0.0;
+  //       if (distance > selectedDistanceKm.value) {
+  //         return false;
+  //       }
+  //     }
 
-      return true;
-    }).toList();
+  //     return true;
+  //   }).toList();
 
-    /// APPLY TO HOME
-    homeController.filteredListings.value = filtered;
+  //   /// APPLY TO HOME
+  //   // homeController.filteredListings.value = filtered;
 
-    /// SORTING
-    if (selectedSort.value.isNotEmpty) {
-      if (selectedSort.value == "price_low_to_high") {
-        filtered.sort((a, b) => a.price.compareTo(b.price));
-      } else if (selectedSort.value == "price_high_to_low") {
-        filtered.sort((a, b) => b.price.compareTo(a.price));
-      } else if (selectedSort.value == "latest") {
-        filtered.sort((a, b) => b.createdAt!.compareTo(a.createdAt!));
-      }
-    }
+  //   /// SORTING
+  //   if (selectedSort.value.isNotEmpty) {
+  //     if (selectedSort.value == "price_low_to_high") {
+  //       filtered.sort((a, b) => a.price.compareTo(b.price));
+  //     } else if (selectedSort.value == "price_high_to_low") {
+  //       filtered.sort((a, b) => b.price.compareTo(a.price));
+  //     } else if (selectedSort.value == "latest") {
+  //       filtered.sort((a, b) => b.createdAt!.compareTo(a.createdAt!));
+  //     }
+  //   }
 
-    homeController.filteredListings.refresh();
-  }
+  //   // homeController.filteredListings.refresh();
+  // }
 
   /// ================= RESET =================
   void reset() {
@@ -151,7 +151,7 @@ class FilterController extends GetxController {
     final homeController = Get.find<HomeController>();
 
     /// RESET LIST
-    homeController.filteredListings.value = homeController.listings;
+    // homeController.filteredListings.value = homeController.listings;
 
     homeController.defaultRadiusKm = 10;
   }

@@ -177,11 +177,6 @@ class AuthController extends GetxController {
         await locationController.detectCurrentLocation();
       }
 
-      // /// 📍 GET FINAL LOCATION VALUE
-      // final location = locationController.selectedLocations.isNotEmpty
-      //     ? locationController.selectedLocations.first
-      //     : "";
-
       /// 💾 SAVE USER DATA + LOCATION
       await _firestore.collection('users').doc(user.uid).set({
         "uid": user.uid,
@@ -195,16 +190,12 @@ class AuthController extends GetxController {
 
       /// OPTIONAL: refresh user data
       await fetchUserData();
-
       AppSnackbar.success("Signup successful 🚀");
-
       clearAllFields();
-
       isLogin.value = true;
 
       /// 🚀 NAVIGATE AFTER EVERYTHING DONE
       Get.offAllNamed(AppRoutes.wrapper);
-
       isGoogleUser.value = false;
     } on FirebaseAuthException catch (e) {
       AppSnackbar.error(_handleAuthError(e));
@@ -219,9 +210,7 @@ class AuthController extends GetxController {
   Future<void> forgotPassword() async {
     try {
       isLoading.value = true;
-
       final email = forgotEmailController.text.trim();
-
       if (email.isEmpty) {
         isLoading.value = false; // ✅ FIX
         AppSnackbar.error("Email is required");
@@ -296,28 +285,20 @@ class AuthController extends GetxController {
 
       final userCred = await _auth.signInWithCredential(credential);
       final user = userCred.user;
-
       if (user == null) throw Exception("Google login failed");
-
       final doc = await _firestore.collection("users").doc(user.uid).get();
-
-      // ✅ EXISTING USER
+      // EXISTING USER
       if (doc.exists && (doc.data()?["phone"] ?? "").toString().isNotEmpty) {
         clearAllFields();
-
         AppSnackbar.success("Login successful ✅"); //  ONLY HERE
-
         Get.offAllNamed(AppRoutes.wrapper);
         return;
       }
-
       //  NEW USER FLOW
       isGoogleUser.value = true;
       isLogin.value = false;
-
       nameController.text = user.displayName ?? "";
       emailController.text = user.email ?? "";
-
       AppSnackbar.success("Complete your profile ✍️"); // ✅ ONLY THIS
     } on FirebaseAuthException catch (e) {
       AppSnackbar.error(_handleAuthError(e));

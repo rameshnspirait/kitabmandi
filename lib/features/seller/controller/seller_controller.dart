@@ -9,6 +9,7 @@ import 'package:get/get.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:geocoding/geocoding.dart';
+import 'package:kitab_mandi/core/services/location_service.dart';
 import 'package:kitab_mandi/features/dashboard/controller/home_controller.dart';
 import 'package:kitab_mandi/features/dashboard/controller/my_ads_controller.dart';
 import 'package:kitab_mandi/features/dashboard/model/listing_model.dart';
@@ -178,28 +179,38 @@ class SellerController extends GetxController {
     try {
       isDetectingLocation.value = true;
 
-      final pos = await Geolocator.getCurrentPosition();
-      final place = await placemarkFromCoordinates(pos.latitude, pos.longitude);
+      /// ✅ Use your common service
+      final locationData = await LocationService.getCurrentLocationDetails();
 
-      final p = place.first;
+      if (locationData == null) {
+        AppSnackbar.error("Location permission required or failed");
+        return;
+      }
 
-      city.value = p.locality ?? "";
-      state.value = p.administrativeArea ?? "";
-      locality.value = p.locality ?? "";
-      subLocality.value = p.subLocality ?? "";
-      postalCode.value = p.postalCode ?? "";
+      /// 📍 Assign values
+      city.value = locationData["city"] ?? "";
+      state.value = locationData["state"] ?? "";
+      locality.value = locationData["locality"] ?? "";
+      subLocality.value = locationData["area"] ?? "";
+      postalCode.value = locationData["pincode"] ?? "";
 
-      lat.value = pos.latitude;
-      long.value = pos.longitude;
+      lat.value = locationData["latitude"];
+      long.value = locationData["longitude"];
 
-      ///  BUILD FULL ADDRESS (CLEAN)
-      fullAddress.value =
-          "${subLocality.value}, ${locality.value}, ${city.value}, ${state.value} - ${postalCode.value}"
-              .replaceAll(RegExp(r'(, )+'), ', ')
-              .replaceAll(RegExp(r'^, |, $'), '');
-
+      /// 🎯 Use formatted address directly
+      fullAddress.value = [
+        locationData["area"],
+        locationData["locality"],
+        locationData["city"],
+        locationData["state"],
+        locationData["pincode"] != null &&
+                locationData["pincode"].toString().isNotEmpty
+            ? "- ${locationData["pincode"]}"
+            : null,
+      ].where((e) => e != null && e.toString().trim().isNotEmpty).join(', ');
       AppSnackbar.success("Location detected");
     } catch (e) {
+      print("Detect location error: $e");
       AppSnackbar.error("Location failed");
     } finally {
       isDetectingLocation.value = false;

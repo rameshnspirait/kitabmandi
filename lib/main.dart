@@ -37,7 +37,6 @@ class MyApp extends StatelessWidget {
       return GetMaterialApp(
         title: 'KitabMandi',
         debugShowCheckedModeBanner: false,
-
         //  THEMES
         theme: AppTheme.lightTheme,
         darkTheme: AppTheme.darkTheme,

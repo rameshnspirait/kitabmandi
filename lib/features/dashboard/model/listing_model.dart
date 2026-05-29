@@ -5,7 +5,7 @@ class ListingModel {
   final int price;
   final int views;
 
-  /// ✅ CATEGORY (NEW STRUCTURE)
+  ///  CATEGORY (NEW STRUCTURE)
   final Map<String, dynamic> category;
 
   final String condition;

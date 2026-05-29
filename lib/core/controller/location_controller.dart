@@ -35,23 +35,21 @@ class LocationController extends GetxController {
   Future<void> detectCurrentLocation() async {
     try {
       isLoadingLocation.value = true;
-
       final location = await LocationService.getCurrentLocationDetails();
-
       if (location != null) {
         final display =
             location['formatted_address'] ??
             location['city'] ??
             "Unknown Location";
 
-        /// ✅ Update selected
+        ///  Update selected
         selectedLocations.value = [display];
 
-        /// 💾 Save
+        ///  Save
         LocationStorage.saveSelected([display]);
         LocationStorage.saveLocationData(location);
 
-        /// 📍 Assign coordinates
+        ///  Assign coordinates
         latitude.value = (location['latitude'] ?? 0.0).toDouble();
         longitude.value = (location['longitude'] ?? 0.0).toDouble();
       }

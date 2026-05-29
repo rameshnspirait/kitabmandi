@@ -663,7 +663,7 @@ class FilterScreen extends StatelessWidget {
 
                   onPressed: () {
                     final homeCtrl = Get.put(HomeController());
-                    homeCtrl.applyFilters();
+                    // homeCtrl.applyFilters();
                     Get.back(result: controller);
                   },
 

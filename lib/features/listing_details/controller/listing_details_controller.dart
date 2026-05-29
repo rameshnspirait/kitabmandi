@@ -107,7 +107,7 @@ class ListingDetailsController extends GetxController {
 
       /// ================= REFRESH DATA =================
       if (Get.isRegistered<HomeController>()) {
-        Get.find<HomeController>().fetchListings();
+        Get.find<HomeController>().fetchTopViewedListings();
       }
 
       if (Get.isRegistered<MyAdsController>()) {

@@ -1,5 +1,4 @@
 import 'dart:convert';
-
 import 'package:carousel_slider/carousel_slider.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -177,8 +176,7 @@ class HomeView extends StatelessWidget {
 
       body: RefreshIndicator(
         onRefresh: () async {
-          filterCtrl.reset();
-          homeCtrl.listenListings();
+          homeCtrl.fetchTopViewedListings();
         },
 
         child: Obx(() {
@@ -266,25 +264,25 @@ class HomeView extends StatelessWidget {
           }
 
           /// ================= EMPTY =================
-          if (homeCtrl.filteredListings.isEmpty) {
-            return ListView(
-              physics: const AlwaysScrollableScrollPhysics(),
+          // if (homeCtrl.filteredListings.isEmpty) {
+          //   return ListView(
+          //     physics: const AlwaysScrollableScrollPhysics(),
 
-              children: [
-                SizedBox(height: Get.height * 0.3),
+          //     children: [
+          //       SizedBox(height: Get.height * 0.3),
 
-                Center(
-                  child: Text(
-                    "No listings found 😔",
+          //       Center(
+          //         child: Text(
+          //           "No listings found 😔",
 
-                    style: theme.textTheme.titleMedium?.copyWith(
-                      color: primaryText,
-                    ),
-                  ),
-                ),
-              ],
-            );
-          }
+          //           style: theme.textTheme.titleMedium?.copyWith(
+          //             color: primaryText,
+          //           ),
+          //         ),
+          //       ),
+          //     ],
+          //   );
+          // }
 
           /// ================= MAIN UI =================
           return ListView(
@@ -627,33 +625,47 @@ class HomeView extends StatelessWidget {
                   ],
                 ),
               ),
-
               const SizedBox(height: 18),
 
               /// ================= LISTINGS =================
               SizedBox(
                 height: isTablet ? 360 : 295,
-
-                child: ListView.separated(
-                  shrinkWrap: true,
-                  padding: const EdgeInsets.symmetric(horizontal: 20),
-
-                  physics: const BouncingScrollPhysics(),
-                  scrollDirection: Axis.horizontal,
-
-                  separatorBuilder: (_, __) => const SizedBox(width: 16),
-
-                  itemCount: homeCtrl.filteredListings.length,
-
-                  itemBuilder: (_, index) {
-                    final book = homeCtrl.filteredListings[index];
-
-                    return SizedBox(
-                      width: isTablet ? 250 : 190,
-                      child: ListingGridCard(listingModel: book),
-                    );
-                  },
-                ),
+                child: homeCtrl.popularListingNearYou.isEmpty
+                    ? Center(
+                        child: Column(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: [
+                            Icon(
+                              Icons.menu_book_outlined,
+                              size: 50,
+                              color: Colors.grey,
+                            ),
+                            SizedBox(height: 10),
+                            Text(
+                              "No Items found",
+                              style: TextStyle(
+                                fontSize: 16,
+                                color: Colors.grey,
+                              ),
+                            ),
+                          ],
+                        ),
+                      )
+                    : ListView.separated(
+                        shrinkWrap: true,
+                        padding: const EdgeInsets.symmetric(horizontal: 20),
+                        physics: const BouncingScrollPhysics(),
+                        scrollDirection: Axis.horizontal,
+                        separatorBuilder: (_, __) => const SizedBox(width: 16),
+                        itemCount: homeCtrl.popularListingNearYou.length,
+                        itemBuilder: (_, index) {
+                          final book = homeCtrl.popularListingNearYou[index];
+                          return SizedBox(
+                            width: isTablet ? 250 : 190,
+                            child: ListingGridCard(listingModel: book),
+                          );
+                        },
+                      ),
               ),
             ],
           );
@@ -665,38 +677,6 @@ class HomeView extends StatelessWidget {
 
 class _LocationSheet extends StatelessWidget {
   const _LocationSheet();
-
-  // ///  STATIC STATES + CITIES
-  // static final Map<String, List<String>> stateCities = {
-  //   "Andhra Pradesh": ["Vijayawada", "Visakhapatnam", "Guntur", "Tirupati"],
-  //   "Telangana": ["Hyderabad", "Warangal", "Karimnagar", "Nizamabad"],
-  //   "Karnataka": ["Bangalore", "Mysore", "Mangalore", "Hubli"],
-  //   "Tamil Nadu": ["Chennai", "Coimbatore", "Madurai", "Salem"],
-  //   "Maharashtra": ["Mumbai", "Pune", "Nagpur", "Nashik"],
-  //   "Delhi": ["New Delhi", "Dwarka", "Rohini"],
-  //   "Gujarat": ["Ahmedabad", "Surat", "Vadodara", "Rajkot"],
-  //   "Rajasthan": ["Jaipur", "Udaipur", "Jodhpur", "Kota"],
-  //   "Uttar Pradesh": [
-  //     "Lucknow",
-  //     "Noida",
-  //     "Kanpur",
-  //     "Varanasi",
-  //     "Gorakhpur",
-  //     "Kushinagar",
-  //     "Padrauna",
-  //   ],
-  //   "Madhya Pradesh": ["Indore", "Bhopal", "Gwalior"],
-  //   "West Bengal": ["Kolkata", "Howrah", "Durgapur"],
-  //   "Punjab": ["Amritsar", "Ludhiana", "Jalandhar"],
-  //   "Haryana": ["Gurgaon", "Faridabad", "Panipat"],
-  //   "Bihar": ["Patna", "Gaya", "Muzaffarpur"],
-  //   "Odisha": ["Bhubaneswar", "Cuttack", "Rourkela"],
-  //   "Kerala": ["Kochi", "Trivandrum", "Kozhikode"],
-  //   "Jharkhand": ["Ranchi", "Jamshedpur", "Dhanbad"],
-  //   "Assam": ["Guwahati", "Silchar"],
-  // };
-
-  // List<String> get states => stateCities.keys.toList();
 
   @override
   Widget build(BuildContext context) {
@@ -726,7 +706,6 @@ class _LocationSheet extends StatelessWidget {
                   borderRadius: BorderRadius.circular(10),
                 ),
               ),
-
               const SizedBox(height: 12),
 
               /// HEADER
@@ -750,7 +729,6 @@ class _LocationSheet extends StatelessWidget {
                   ],
                 ),
               ),
-
               const SizedBox(height: 12),
 
               /// 📍 CURRENT LOCATION
@@ -1127,7 +1105,7 @@ class _AllCategoriesScreenState extends State<AllCategoriesScreen> {
                                     ],
                                   ),
 
-                                  /// ✅ FIXED CONTENT (NO WRAP)
+                                  ///  FIXED CONTENT (NO WRAP)
                                   child: Center(
                                     child: Text(
                                       item['name'] ?? '',
@@ -1223,16 +1201,12 @@ class AllListingsScreen extends StatelessWidget {
         return RefreshIndicator(
           color: Colors.green,
           backgroundColor: isDark ? const Color(0xFF171B22) : Colors.white,
-
           onRefresh: () async {
-            filterCtrl.reset();
-
-            homeCtrl.listenListings();
-
+            homeCtrl.fetchAllListings();
             await Future.delayed(const Duration(milliseconds: 1200));
           },
 
-          child: homeCtrl.filteredListings.isEmpty
+          child: homeCtrl.allListings.isEmpty
               ? ListView(
                   physics: const AlwaysScrollableScrollPhysics(),
 
@@ -1283,10 +1257,10 @@ class AllListingsScreen extends StatelessWidget {
                         mainAxisExtent: width >= 600 ? 320 : 300,
                       ),
 
-                      itemCount: homeCtrl.filteredListings.length,
+                      itemCount: homeCtrl.allListings.length,
 
                       itemBuilder: (_, index) {
-                        final book = homeCtrl.filteredListings[index];
+                        final book = homeCtrl.allListings[index];
 
                         return SizedBox(
                           width: double.infinity,
