@@ -22,9 +22,7 @@ class LocationController extends GetxController {
   void loadInitialData() {
     selectedLocations.value = LocationStorage.getSelected();
     recentLocations.value = LocationStorage.getRecent();
-
     final saved = LocationStorage.getLocationData();
-
     if (saved != null) {
       latitude.value = (saved['latitude'] ?? 0.0).toDouble();
       longitude.value = (saved['longitude'] ?? 0.0).toDouble();

@@ -492,9 +492,8 @@ class HomeView extends StatelessWidget {
                 ),
               ),
 
-              const SizedBox(height: 18),
+              const SizedBox(height: 20),
 
-              /// ================= CATEGORY LIST =================
               /// ================= CATEGORY LIST =================
               Obx(() {
                 if (categoriesData.isEmpty) {
@@ -578,7 +577,7 @@ class HomeView extends StatelessWidget {
                 );
               }),
 
-              const SizedBox(height: 10),
+              const SizedBox(height: 20),
 
               /// ================= POPULAR HEADER =================
               Padding(
@@ -586,7 +585,6 @@ class HomeView extends StatelessWidget {
 
                 child: Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
-
                   children: [
                     Text(
                       "Popular Near You",

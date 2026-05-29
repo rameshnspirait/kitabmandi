@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:kitab_mandi/core/constants/app_color.dart';
 import 'package:kitab_mandi/core/controller/filter_controller.dart';
-import 'package:kitab_mandi/features/dashboard/controller/home_controller.dart';
 
 class FilterScreen extends StatelessWidget {
   FilterScreen({super.key});

@@ -6,6 +6,7 @@ import 'package:google_sign_in/google_sign_in.dart';
 import 'package:hive/hive.dart';
 import 'package:kitab_mandi/core/constants/app_color.dart';
 import 'package:kitab_mandi/core/controller/location_controller.dart';
+import 'package:kitab_mandi/core/storage/location_storage.dart';
 import 'package:kitab_mandi/routes/app_routes.dart';
 import 'package:kitab_mandi/widgets/app_button.dart';
 import '../../../core/utils/app_snackbar.dart';
@@ -14,6 +15,7 @@ import '../../../core/utils/validators.dart';
 class AuthController extends GetxController {
   final FirebaseAuth _auth = FirebaseAuth.instance;
   final FirebaseFirestore _firestore = FirebaseFirestore.instance;
+  final locationController = Get.put(LocationController());
 
   final GoogleSignIn _googleSignIn = GoogleSignIn(
     serverClientId:
@@ -168,11 +170,10 @@ class AuthController extends GetxController {
       }
 
       ///  GET LOCATION CONTROLLER
-      final locationController = Get.put(LocationController());
 
       /// DETECT LOCATION ONLY IF NOT ALREADY SELECTED
       if (locationController.selectedLocations.isEmpty) {
-        await locationController.detectCurrentLocation();
+        locationController.loadInitialData();
       }
 
       ///  SAVE USER DATA + LOCATION
@@ -243,6 +244,11 @@ class AuthController extends GetxController {
         email: emailController.text.trim(),
         password: passwordController.text.trim(),
       );
+
+      /// LOAD LOCATION ONLY IF NOT ALREADY SELECTED
+      if (locationController.selectedLocations.isEmpty) {
+        locationController.loadInitialData();
+      }
       // Get.offAllNamed(AppRoutes.wrapper);
       clearAllFields();
     } on FirebaseAuthException catch (e) {
@@ -284,8 +290,11 @@ class AuthController extends GetxController {
       final doc = await _firestore.collection("users").doc(user.uid).get();
       // EXISTING USER
       if (doc.exists && (doc.data()?["phone"] ?? "").toString().isNotEmpty) {
+        /// LOAD LOCATION ONLY IF NOT ALREADY SELECTED
+        if (locationController.selectedLocations.isEmpty) {
+          locationController.loadInitialData();
+        }
         clearAllFields();
-        // AppSnackbar.success("Login successful ✅"); //  ONLY HERE
         Get.offAllNamed(AppRoutes.wrapper);
         return;
       }
@@ -313,8 +322,7 @@ class AuthController extends GetxController {
         await _googleSignIn.signOut();
       }
 
-      ///  Clear only your data (NOT close Hive)
-      await Hive.box('locationBox').clear();
+      /// 🧹 Clear controllers only
       clearAllFields();
       Get.deleteAll();
     } catch (e) {
