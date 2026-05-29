@@ -76,7 +76,6 @@ class CityScreen extends StatelessWidget {
         itemCount: cities.length,
         itemBuilder: (_, i) {
           final city = cities[i];
-
           return ListTile(
             leading: const Icon(Icons.place),
             title: Text(city),

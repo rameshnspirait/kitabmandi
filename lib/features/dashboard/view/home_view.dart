@@ -594,42 +594,72 @@ class HomeView extends StatelessWidget {
               /// ================= LISTINGS =================
               SizedBox(
                 height: isTablet ? 360 : 295,
-                child: homeCtrl.popularListingNearYou.isEmpty
-                    ? Center(
-                        child: Column(
-                          mainAxisAlignment: MainAxisAlignment.center,
-                          children: [
-                            Icon(
-                              Icons.menu_book_outlined,
-                              size: 50,
-                              color: Colors.grey,
-                            ),
-                            SizedBox(height: 10),
-                            Text(
-                              "No Items found",
-                              style: TextStyle(
-                                fontSize: 16,
-                                color: Colors.grey,
-                              ),
-                            ),
-                          ],
+                child: Obx(() {
+                  /// 🔄 If location still loading
+                  if (locationCtrl.isLoadingLocation.value) {
+                    return const Center(child: CircularProgressIndicator());
+                  }
+
+                  /// 📍 If location not available
+                  if (locationCtrl.latitude.value == 0.0 ||
+                      locationCtrl.longitude.value == 0.0) {
+                    return Column(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        Icon(Icons.location_off, size: 50, color: Colors.grey),
+                        const SizedBox(height: 10),
+                        const Text(
+                          "Location not detected",
+                          style: TextStyle(fontSize: 15, color: Colors.grey),
                         ),
-                      )
-                    : ListView.separated(
-                        shrinkWrap: true,
-                        padding: const EdgeInsets.symmetric(horizontal: 20),
-                        physics: const BouncingScrollPhysics(),
-                        scrollDirection: Axis.horizontal,
-                        separatorBuilder: (_, __) => const SizedBox(width: 16),
-                        itemCount: homeCtrl.popularListingNearYou.length,
-                        itemBuilder: (_, index) {
-                          final book = homeCtrl.popularListingNearYou[index];
-                          return SizedBox(
-                            width: isTablet ? 250 : 190,
-                            child: ListingGridCard(listingModel: book),
-                          );
-                        },
-                      ),
+                        const SizedBox(height: 6),
+                        TextButton(
+                          onPressed: () async {
+                            await locationCtrl.detectCurrentLocation();
+                          },
+                          child: const Text("Detect Location"),
+                        ),
+                      ],
+                    );
+                  }
+
+                  /// 📦 No listings in 5KM
+                  if (homeCtrl.popularListingNearYou.isEmpty) {
+                    return Column(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        Icon(Icons.search_off, size: 50, color: Colors.grey),
+                        const SizedBox(height: 10),
+                        const Text(
+                          "No items found within 5 KM",
+                          style: TextStyle(fontSize: 15, color: Colors.grey),
+                        ),
+                        const SizedBox(height: 6),
+                        const Text(
+                          "Try changing location or increasing radius",
+                          style: TextStyle(fontSize: 12, color: Colors.grey),
+                        ),
+                      ],
+                    );
+                  }
+
+                  /// ✅ DATA FOUND
+                  return ListView.separated(
+                    shrinkWrap: true,
+                    padding: const EdgeInsets.symmetric(horizontal: 20),
+                    physics: const BouncingScrollPhysics(),
+                    scrollDirection: Axis.horizontal,
+                    separatorBuilder: (_, __) => const SizedBox(width: 16),
+                    itemCount: homeCtrl.popularListingNearYou.length,
+                    itemBuilder: (_, index) {
+                      final book = homeCtrl.popularListingNearYou[index];
+                      return SizedBox(
+                        width: isTablet ? 250 : 190,
+                        child: ListingGridCard(listingModel: book),
+                      );
+                    },
+                  );
+                }),
               ),
             ],
           );
