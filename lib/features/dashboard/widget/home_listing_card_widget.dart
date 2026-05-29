@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:kitab_mandi/core/utils/time_ago_utils.dart';
+import 'package:kitab_mandi/features/dashboard/controller/home_controller.dart';
 import 'package:kitab_mandi/features/listing_details/view/listing_details_view.dart';
 import 'package:kitab_mandi/features/wishlist/controller/wishlist_controller.dart';
 import 'package:kitab_mandi/features/dashboard/model/listing_model.dart';
@@ -19,6 +20,7 @@ class _ListingGridCardState extends State<ListingGridCard> {
   bool isFav = false;
   int currentImage = 0;
   final wishlistController = Get.put(WishlistController());
+  final homeCtrl = Get.find<HomeController>();
 
   Color _surface(BuildContext context) {
     final isDark = Theme.of(context).brightness == Brightness.dark;
@@ -320,12 +322,15 @@ class _ListingGridCardState extends State<ListingGridCard> {
                       children: [
                         Icon(Icons.near_me, size: 13, color: Colors.grey),
                         SizedBox(width: 5),
+
                         Text(
-                          widget.listingModel.distanceKm == null
-                              ? ""
-                              : widget.listingModel.distanceKm! < 1
-                              ? "${(widget.listingModel.distanceKm! * 1000).toStringAsFixed(0)} m away"
-                              : "${widget.listingModel.distanceKm?.toStringAsFixed(1)} km away",
+                          homeCtrl.calculateDistance(
+                                    sellerLat: widget.listingModel.lat,
+                                    sellerLong: widget.listingModel.long,
+                                  ) <
+                                  1
+                              ? "${(homeCtrl.calculateDistance(sellerLat: widget.listingModel.lat, sellerLong: widget.listingModel.long) * 1000).toStringAsFixed(0)} m away"
+                              : "${homeCtrl.calculateDistance(sellerLat: widget.listingModel.lat, sellerLong: widget.listingModel.long).toStringAsFixed(1)} km away",
                           style: TextStyle(fontSize: 12, color: Colors.grey),
                         ),
                       ],

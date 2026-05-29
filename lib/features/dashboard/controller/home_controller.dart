@@ -31,18 +31,35 @@ class HomeController extends GetxController {
   }
 
   ///  Distance (Haversine)
-  double calculateDistance(double lat1, double lon1, double lat2, double lon2) {
-    const earthRadius = 6371;
-    final dLat = (lat2 - lat1) * pi / 180;
-    final dLon = (lon2 - lon1) * pi / 180;
+  double calculateDistance({
+    required double sellerLat,
+    required double sellerLong,
+  }) {
+    final userLat = locationCtrl.latitude.value;
+    final userLong = locationCtrl.longitude.value;
+
+    /// ⚠️ Safety check (important)
+    if (userLat == 0.0 || userLong == 0.0) {
+      return 0.0; // or return -1 to indicate unknown
+    }
+
+    const earthRadius = 6371; // KM
+
+    final dLat = (sellerLat - userLat) * pi / 180;
+    final dLon = (sellerLong - userLong) * pi / 180;
+
     final a =
         sin(dLat / 2) * sin(dLat / 2) +
-        cos(lat1 * pi / 180) *
-            cos(lat2 * pi / 180) *
+        cos(userLat * pi / 180) *
+            cos(sellerLat * pi / 180) *
             sin(dLon / 2) *
             sin(dLon / 2);
+
     final c = 2 * atan2(sqrt(a), sqrt(1 - a));
-    return earthRadius * c;
+
+    final distance = earthRadius * c;
+
+    return distance; // in KM
   }
 
   ///  Manual Fetch
