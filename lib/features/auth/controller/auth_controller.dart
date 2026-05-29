@@ -52,7 +52,7 @@ class AuthController extends GetxController {
         await fetchUserData();
 
         if (_isManualLogin) {
-          AppSnackbar.success("Login successful 🎉");
+          // AppSnackbar.success("Login successful 🎉");
           _isManualLogin = false;
         }
       } else {
@@ -134,9 +134,7 @@ class AuthController extends GetxController {
   /// ================= SUBMIT =================
   Future<void> submit() async {
     FocusManager.instance.primaryFocus?.unfocus();
-
     if (!formKey.currentState!.validate()) return;
-
     if (isLogin.value) {
       await login();
     } else {
@@ -169,15 +167,15 @@ class AuthController extends GetxController {
         return;
       }
 
-      /// 📍 GET LOCATION CONTROLLER
+      ///  GET LOCATION CONTROLLER
       final locationController = Get.put(LocationController());
 
-      /// 📍 DETECT LOCATION ONLY IF NOT ALREADY SELECTED
+      /// DETECT LOCATION ONLY IF NOT ALREADY SELECTED
       if (locationController.selectedLocations.isEmpty) {
         await locationController.detectCurrentLocation();
       }
 
-      /// 💾 SAVE USER DATA + LOCATION
+      ///  SAVE USER DATA + LOCATION
       await _firestore.collection('users').doc(user.uid).set({
         "uid": user.uid,
         "name": name,
@@ -190,7 +188,7 @@ class AuthController extends GetxController {
 
       /// OPTIONAL: refresh user data
       await fetchUserData();
-      AppSnackbar.success("Signup successful 🚀");
+      // AppSnackbar.success("Signup successful 🚀");
       clearAllFields();
       isLogin.value = true;
 
@@ -222,11 +220,8 @@ class AuthController extends GetxController {
         AppSnackbar.error("Enter a valid email");
         return;
       }
-
       await _auth.sendPasswordResetEmail(email: email);
-
       //  SUCCESS FLOW
-
       clearAllFields();
       Get.back(result: true); // ✅ go back
       AppSnackbar.success("Password reset link sent 📩");
@@ -290,7 +285,7 @@ class AuthController extends GetxController {
       // EXISTING USER
       if (doc.exists && (doc.data()?["phone"] ?? "").toString().isNotEmpty) {
         clearAllFields();
-        AppSnackbar.success("Login successful ✅"); //  ONLY HERE
+        // AppSnackbar.success("Login successful ✅"); //  ONLY HERE
         Get.offAllNamed(AppRoutes.wrapper);
         return;
       }
