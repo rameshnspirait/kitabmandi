@@ -288,7 +288,7 @@ class ProfileView extends StatelessWidget {
     return SizedBox(
       width: double.infinity,
       child: AppButton(
-        backgroundColor: AppColors.secondaryDark,
+        backgroundColor: AppColors.primaryDark,
         text: "Logout",
         onPressed: () {
           authCtrl.showLogoutDialog(context);

@@ -80,16 +80,6 @@ class FilterScreen extends StatelessWidget {
         elevation: 0,
         centerTitle: true,
         backgroundColor: _appBarBg(context),
-
-        // leading: IconButton(
-        //   onPressed: () => Get.back(),
-
-        //   icon: Icon(
-        //     Icons.arrow_back_ios_new_rounded,
-        //     color: primaryText,
-        //     size: 16,
-        //   ),
-        // ),
         title: Text(
           "Filters",
           style: theme.textTheme.titleLarge?.copyWith(
@@ -406,25 +396,40 @@ class FilterScreen extends StatelessWidget {
 
                     /// PRICE RANGE
                     _sectionTitle(context, "Price Range", primaryText),
-
                     const SizedBox(height: 6),
 
+                    /// Range Slider
                     Obx(
                       () => SliderTheme(
                         data: SliderTheme.of(context).copyWith(
-                          activeTrackColor: AppColors.primaryDark,
+                          /// Active (selected range)
+                          activeTrackColor: theme.colorScheme.primary,
+
+                          /// Inactive (remaining range)
                           inactiveTrackColor: isDark
-                              ? Colors.white10
+                              ? Colors.white12
                               : Colors.black12,
 
-                          thumbColor: AppColors.primaryDark,
+                          /// Thumb (circle)
+                          thumbColor: theme.colorScheme.primary,
 
-                          overlayColor: AppColors.primaryLight.withOpacity(0.2),
+                          /// Overlay effect when dragging
+                          overlayColor: theme.colorScheme.primary.withOpacity(
+                            0.2,
+                          ),
 
+                          /// Track height
                           trackHeight: 5,
 
+                          /// Thumb size
                           rangeThumbShape: const RoundRangeSliderThumbShape(
                             enabledThumbRadius: 10,
+                          ),
+
+                          /// Value indicator (optional)
+                          valueIndicatorColor: theme.colorScheme.primary,
+                          valueIndicatorTextStyle: TextStyle(
+                            color: theme.colorScheme.onPrimary,
                           ),
                         ),
 
@@ -436,6 +441,11 @@ class FilterScreen extends StatelessWidget {
 
                           min: 0,
                           max: 5000,
+
+                          labels: RangeLabels(
+                            controller.minPrice.value.toInt().toString(),
+                            controller.maxPrice.value.toInt().toString(),
+                          ),
 
                           onChanged: (values) {
                             controller.minPrice.value = values.start;

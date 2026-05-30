@@ -333,10 +333,8 @@ class HomeView extends StatelessWidget {
 
                                   Text(
                                     "Buy & Sell Books, Notes\nwith nearby students",
-
                                     maxLines: 2,
                                     overflow: TextOverflow.ellipsis,
-
                                     style: theme.textTheme.bodyMedium?.copyWith(
                                       fontSize: responsiveText(
                                         context,
@@ -381,30 +379,23 @@ class HomeView extends StatelessWidget {
                   );
                 },
               ),
-
               const SizedBox(height: 10),
 
               /// ================= DOTS =================
               Obx(
                 () => Row(
                   mainAxisAlignment: MainAxisAlignment.center,
-
                   children: List.generate(bannerImages.length, (index) {
                     final isActive = currentBanner.value == index;
-
                     return AnimatedContainer(
                       duration: const Duration(milliseconds: 300),
-
                       margin: const EdgeInsets.symmetric(horizontal: 4),
-
                       height: 7,
                       width: isActive ? 12 : 7,
-
                       decoration: BoxDecoration(
                         borderRadius: BorderRadius.circular(50),
-
                         color: isActive
-                            ? const Color(0xFF63E6A9)
+                            ? theme.colorScheme.primary
                             : isDark
                             ? Colors.white24
                             : Colors.black12,
@@ -452,7 +443,7 @@ class HomeView extends StatelessWidget {
                             tablet: 15,
                           ),
                           fontWeight: FontWeight.w600,
-                          color: const Color(0xFF63E6A9),
+                          color: theme.colorScheme.primary,
                         ),
                       ),
                     ),
@@ -582,7 +573,7 @@ class HomeView extends StatelessWidget {
                             tablet: 15,
                           ),
                           fontWeight: FontWeight.w600,
-                          color: const Color(0xFF63E6A9),
+                          color: theme.colorScheme.primary,
                         ),
                       ),
                     ),
