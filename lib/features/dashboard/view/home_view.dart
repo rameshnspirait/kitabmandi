@@ -10,6 +10,7 @@ import 'package:kitab_mandi/features/dashboard/controller/home_controller.dart';
 import 'package:kitab_mandi/features/dashboard/widget/home_listing_card_shimmer.dart';
 import 'package:kitab_mandi/features/dashboard/widget/home_listing_card_widget.dart';
 import 'package:kitab_mandi/features/dashboard/widget/home_location_appbar_widget.dart';
+import 'package:kitab_mandi/routes/app_routes.dart';
 import 'package:kitab_mandi/widgets/app_cached_image_network.dart';
 import 'package:shimmer/shimmer.dart';
 
@@ -824,14 +825,13 @@ class AllCategoriesScreen extends StatefulWidget {
 
 class _AllCategoriesScreenState extends State<AllCategoriesScreen> {
   List categories = [];
-  int selectedTypeIndex = -1;
-  int selectedMainIndex = 0;
-  int selectedSubIndex = 0;
+
+  final filterCtrl = Get.find<FilterController>();
+  final homeCtrl = Get.find<HomeController>();
 
   @override
   void initState() {
     super.initState();
-    selectedMainIndex = widget.initialIndex;
     loadCategories();
   }
 
@@ -844,289 +844,230 @@ class _AllCategoriesScreenState extends State<AllCategoriesScreen> {
     });
   }
 
+  int getMainIndex() {
+    return categories
+        .indexWhere((c) => c['name'] == filterCtrl.selectedCategory.value)
+        .clamp(0, categories.length - 1);
+  }
+
+  int getSubIndex(List subCategories) {
+    return subCategories
+        .indexWhere((s) => s['name'] == filterCtrl.selectedSubCategory.value)
+        .clamp(0, subCategories.length - 1);
+  }
+
   IconData getIcon(String name) {
     switch (name.toLowerCase()) {
       case "book":
         return Icons.menu_book_rounded;
-
       case "school":
         return Icons.school_rounded;
-
       case "academic":
         return Icons.auto_stories_rounded;
-
       case "trophy":
         return Icons.workspace_premium_rounded;
-
       case "note":
         return Icons.sticky_note_2_rounded;
-
       case "pen":
         return Icons.draw_rounded;
-
       case "laptop":
         return Icons.laptop_mac_rounded;
-
       case "exam":
         return Icons.fact_check_rounded;
-
       case "science":
         return Icons.science_rounded;
-
       case "math":
         return Icons.calculate_rounded;
-
       case "language":
         return Icons.translate_rounded;
-
       case "commerce":
         return Icons.account_balance_rounded;
-
       case "engineering":
         return Icons.engineering_rounded;
-
       default:
         return Icons.category_rounded;
     }
   }
 
+  void applyAndNavigate() {
+    homeCtrl.applyAllFilters();
+    Get.to(() => AllListingsScreen());
+  }
+
   @override
   Widget build(BuildContext context) {
-    final isDark = Theme.of(context).brightness == Brightness.dark;
-
-    final bgColor = isDark ? AppColors.darkBackground : AppColors.background;
-    final cardColor = isDark ? AppColors.darkCard : AppColors.card;
-    final primaryText = isDark
-        ? AppColors.darkTextPrimary
-        : AppColors.textPrimary;
-    final secondaryText = isDark
-        ? AppColors.darkTextSecondary
-        : AppColors.textSecondary;
-    final borderColor = isDark ? AppColors.darkBorder : AppColors.border;
-
     if (categories.isEmpty) {
       return const Scaffold(body: Center(child: CircularProgressIndicator()));
     }
 
-    final main = categories[selectedMainIndex];
-    final subCategories = main['subcategories'] ?? [];
+    return Obx(() {
+      final selectedMainIndex = getMainIndex();
+      final main = categories[selectedMainIndex];
 
-    final selectedSub = subCategories.isNotEmpty
-        ? subCategories[selectedSubIndex]
-        : null;
+      final subCategories = main['subcategories'] ?? [];
+      final selectedSubIndex = subCategories.isEmpty
+          ? 0
+          : getSubIndex(subCategories);
 
-    final children = selectedSub != null ? (selectedSub['children'] ?? []) : [];
+      final selectedSub = subCategories.isNotEmpty
+          ? subCategories[selectedSubIndex]
+          : null;
 
-    final screenWidth = MediaQuery.of(context).size.width;
+      final children = selectedSub != null
+          ? (selectedSub['children'] ?? [])
+          : [];
 
-    final crossAxisCount = screenWidth < 360
-        ? 2
-        : screenWidth < 600
-        ? 3
-        : 4;
+      return Scaffold(
+        appBar: AppBar(title: const Text("Categories")),
 
-    return Scaffold(
-      backgroundColor: bgColor,
-      appBar: AppBar(
-        title: const Text("Categories"),
-        centerTitle: true,
-        backgroundColor: cardColor,
-        foregroundColor: primaryText,
-        elevation: 0,
-      ),
+        body: Row(
+          children: [
+            /// LEFT PANEL
+            Container(
+              width: 90,
+              child: ListView.builder(
+                itemCount: categories.length,
+                itemBuilder: (_, index) {
+                  final item = categories[index];
+                  final isSelected =
+                      filterCtrl.selectedCategory.value == item['name'];
 
-      body: Row(
-        children: [
-          /// LEFT PANEL
-          Container(
-            width: 90,
-            color: cardColor,
-            child: ListView.builder(
-              itemCount: categories.length,
-              itemBuilder: (_, index) {
-                final item = categories[index];
-                final isSelected = selectedMainIndex == index;
+                  return GestureDetector(
+                    onTap: () {
+                      filterCtrl.selectedCategory.value = item['name'];
+                      filterCtrl.selectedSubCategory.value = '';
+                      filterCtrl.selectedType.value = '';
 
-                return GestureDetector(
-                  onTap: () {
-                    setState(() {
-                      selectedMainIndex = index;
-                      selectedSubIndex = 0;
-                      selectedTypeIndex = -1;
-                    });
-                  },
-                  child: Container(
-                    padding: const EdgeInsets.symmetric(vertical: 12),
-                    color: isSelected
-                        ? AppColors.primary.withOpacity(0.1)
-                        : Colors.transparent,
-                    child: Column(
-                      children: [
-                        Icon(
-                          getIcon(item['icon']),
-                          color: isSelected ? AppColors.primary : primaryText,
-                        ),
-                        const SizedBox(height: 6),
-                        Text(
-                          item['name'],
-                          textAlign: TextAlign.center,
-                          maxLines: 2,
-                          overflow: TextOverflow.ellipsis,
-                          style: TextStyle(
-                            fontSize: 11,
-                            color: isSelected ? AppColors.primary : primaryText,
-                            fontWeight: FontWeight.w600,
+                      final sub = item['subcategories'] ?? [];
+
+                      /// 🔥 NO SUB → APPLY
+                      if (sub.isEmpty) {
+                        applyAndNavigate();
+                      }
+                    },
+                    child: Container(
+                      padding: const EdgeInsets.symmetric(vertical: 12),
+                      color: isSelected
+                          ? AppColors.primary.withOpacity(0.1)
+                          : Colors.transparent,
+                      child: Column(
+                        children: [
+                          Icon(
+                            getIcon(item['icon']),
+                            color: isSelected
+                                ? AppColors.primary
+                                : Colors.black,
                           ),
-                        ),
-                      ],
+                          Text(
+                            item['name'],
+                            textAlign: TextAlign.center,
+                            maxLines: 2,
+                            overflow: TextOverflow.ellipsis,
+                          ),
+                        ],
+                      ),
                     ),
-                  ),
-                );
-              },
-            ),
-          ),
-
-          /// RIGHT PANEL
-          Expanded(
-            child: Padding(
-              padding: const EdgeInsets.all(14),
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  /// SUB CATEGORY CHIPS
-                  SizedBox(
-                    height: 45,
-                    child: ListView.builder(
-                      scrollDirection: Axis.horizontal,
-                      itemCount: subCategories.length,
-                      itemBuilder: (_, index) {
-                        final sub = subCategories[index];
-                        final isSelected = selectedSubIndex == index;
-
-                        return Padding(
-                          padding: const EdgeInsets.only(right: 8),
-                          child: ChoiceChip(
-                            checkmarkColor: Colors.white,
-                            label: Text(
-                              sub['name'],
-                              maxLines: 1,
-                              overflow: TextOverflow.ellipsis,
-                            ),
-                            selected: isSelected,
-                            selectedColor: AppColors.primary,
-                            backgroundColor: cardColor,
-                            labelStyle: TextStyle(
-                              color: isSelected ? Colors.white : primaryText,
-                              fontWeight: FontWeight.w600,
-                            ),
-                            side: BorderSide(color: borderColor),
-                            onSelected: (_) {
-                              setState(() {
-                                selectedSubIndex = index;
-                                selectedTypeIndex = -1;
-                              });
-                            },
-                          ),
-                        );
-                      },
-                    ),
-                  ),
-
-                  const SizedBox(height: 20),
-
-                  /// GRID
-                  Expanded(
-                    child: children.isEmpty
-                        ? Center(
-                            child: Text(
-                              "No items available",
-                              style: TextStyle(color: secondaryText),
-                            ),
-                          )
-                        : GridView.builder(
-                            itemCount: children.length,
-                            gridDelegate:
-                                SliverGridDelegateWithFixedCrossAxisCount(
-                                  crossAxisCount: crossAxisCount,
-                                  crossAxisSpacing: 10,
-                                  mainAxisSpacing: 10,
-                                  childAspectRatio: 1.9,
-                                ),
-                            itemBuilder: (_, index) {
-                              final item = children[index];
-                              final isSelected = selectedTypeIndex == index;
-
-                              return GestureDetector(
-                                onTap: () {
-                                  setState(() {
-                                    selectedTypeIndex = index;
-                                  });
-                                },
-                                child: AnimatedContainer(
-                                  duration: const Duration(milliseconds: 220),
-                                  curve: Curves.easeInOut,
-                                  padding: const EdgeInsets.symmetric(
-                                    horizontal: 10,
-                                    vertical: 8,
-                                  ),
-
-                                  decoration: BoxDecoration(
-                                    color: isSelected
-                                        ? AppColors.primary
-                                        : cardColor,
-                                    borderRadius: BorderRadius.circular(30),
-                                    border: Border.all(
-                                      color: isSelected
-                                          ? AppColors.primary
-                                          : borderColor,
-                                    ),
-                                    boxShadow: [
-                                      if (isSelected)
-                                        BoxShadow(
-                                          color: AppColors.primary.withOpacity(
-                                            0.25,
-                                          ),
-                                          blurRadius: 10,
-                                          offset: const Offset(0, 4),
-                                        )
-                                      else
-                                        BoxShadow(
-                                          color: AppColors.shadow,
-                                          blurRadius: 6,
-                                          offset: const Offset(0, 2),
-                                        ),
-                                    ],
-                                  ),
-
-                                  ///  FIXED CONTENT (NO WRAP)
-                                  child: Center(
-                                    child: Text(
-                                      item['name'] ?? '',
-                                      textAlign: TextAlign.center,
-                                      maxLines: 2,
-                                      overflow: TextOverflow.ellipsis,
-                                      style: TextStyle(
-                                        fontWeight: FontWeight.w600,
-                                        fontSize: 13,
-                                        height: 1.2,
-                                        color: isSelected
-                                            ? Colors.white
-                                            : primaryText,
-                                      ),
-                                    ),
-                                  ),
-                                ),
-                              );
-                            },
-                          ),
-                  ),
-                ],
+                  );
+                },
               ),
             ),
-          ),
-        ],
-      ),
-    );
+
+            /// RIGHT PANEL
+            Expanded(
+              child: Padding(
+                padding: const EdgeInsets.all(12),
+                child: Column(
+                  children: [
+                    /// SUB CATEGORY
+                    SizedBox(
+                      height: 45,
+                      child: ListView.builder(
+                        scrollDirection: Axis.horizontal,
+                        itemCount: subCategories.length,
+                        itemBuilder: (_, index) {
+                          final sub = subCategories[index];
+                          final isSelected =
+                              filterCtrl.selectedSubCategory.value ==
+                              sub['name'];
+
+                          return Padding(
+                            padding: const EdgeInsets.only(right: 8),
+                            child: ChoiceChip(
+                              label: Text(sub['name']),
+                              selected: isSelected,
+                              onSelected: (_) {
+                                filterCtrl.selectedSubCategory.value =
+                                    sub['name'];
+                                filterCtrl.selectedType.value = '';
+
+                                final children = sub['children'] ?? [];
+
+                                /// 🔥 NO CHILD → APPLY
+                                if (children.isEmpty) {
+                                  applyAndNavigate();
+                                }
+                              },
+                            ),
+                          );
+                        },
+                      ),
+                    ),
+
+                    const SizedBox(height: 20),
+
+                    /// CHILD GRID
+                    Expanded(
+                      child: GridView.builder(
+                        itemCount: children.length,
+                        gridDelegate:
+                            const SliverGridDelegateWithFixedCrossAxisCount(
+                              crossAxisCount: 3,
+                              childAspectRatio: 2,
+                            ),
+                        itemBuilder: (_, index) {
+                          final item = children[index];
+                          final isSelected =
+                              filterCtrl.selectedType.value == item['name'];
+
+                          return GestureDetector(
+                            onTap: () {
+                              filterCtrl.selectedType.value = item['name'];
+
+                              /// 🔥 APPLY + NAVIGATE
+                              applyAndNavigate();
+                            },
+                            child: Container(
+                              margin: const EdgeInsets.all(6),
+                              decoration: BoxDecoration(
+                                color: isSelected
+                                    ? AppColors.primary
+                                    : Colors.grey.shade200,
+                                borderRadius: BorderRadius.circular(20),
+                              ),
+                              child: Center(
+                                child: Text(
+                                  item['name'],
+                                  textAlign: TextAlign.center,
+                                  style: TextStyle(
+                                    color: isSelected
+                                        ? Colors.white
+                                        : Colors.black,
+                                  ),
+                                ),
+                              ),
+                            ),
+                          );
+                        },
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+            ),
+          ],
+        ),
+      );
+    });
   }
 }
 
