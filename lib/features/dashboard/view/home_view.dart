@@ -51,10 +51,19 @@ class HomeView extends StatelessWidget {
     }
   }
 
-  final List<String> bannerImages = [
-    "https://images.unsplash.com/photo-1524995997946-a1c2e315a42f",
-    "https://images.unsplash.com/photo-1512820790803-83ca734da794",
-    "https://images.unsplash.com/photo-1516979187457-637abb4f9353",
+  final List<Map<String, String>> bannerList = [
+    {
+      "title": "Buy & sell\nbooks easily\nnear you",
+      "url": "https://images.unsplash.com/photo-1524995997946-a1c2e315a42f",
+    },
+    {
+      "title": "Affordable study\nmaterials for\nevery student",
+      "url": "https://images.unsplash.com/photo-1512820790803-83ca734da794",
+    },
+    {
+      "title": "Upgrade your\nlearning with\nsecond-hand books",
+      "url": "https://images.unsplash.com/photo-1516979187457-637abb4f9353",
+    },
   ];
 
   double responsiveText(
@@ -263,7 +272,7 @@ class HomeView extends StatelessWidget {
 
               /// ================= BANNER =================
               CarouselSlider.builder(
-                itemCount: bannerImages.length,
+                itemCount: bannerList.length,
                 options: CarouselOptions(
                   height: isTablet ? 260 : 190,
                   autoPlay: true,
@@ -311,8 +320,7 @@ class HomeView extends StatelessWidget {
 
                                 children: [
                                   Text(
-                                    "Find the right\nstudy material\nfor your success",
-
+                                    bannerList[index]["title"]!,
                                     maxLines: 3,
                                     overflow: TextOverflow.ellipsis,
 
@@ -367,7 +375,7 @@ class HomeView extends StatelessWidget {
                                 ),
 
                                 child: AppCachedImageNetwork(
-                                  imageUrl: bannerImages[index],
+                                  imageUrl: bannerList[index]["url"]!,
                                   fit: BoxFit.cover,
                                 ),
                               ),
@@ -385,7 +393,7 @@ class HomeView extends StatelessWidget {
               Obx(
                 () => Row(
                   mainAxisAlignment: MainAxisAlignment.center,
-                  children: List.generate(bannerImages.length, (index) {
+                  children: List.generate(bannerList.length, (index) {
                     final isActive = currentBanner.value == index;
                     return AnimatedContainer(
                       duration: const Duration(milliseconds: 300),
