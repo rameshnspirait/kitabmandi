@@ -6,7 +6,7 @@ import 'package:kitab_mandi/core/controller/filter_controller.dart';
 class FilterScreen extends StatelessWidget {
   FilterScreen({super.key});
 
-  final controller = Get.put(FilterController());
+  final filterCtrl = Get.put(FilterController());
 
   final conditions = [
     {
@@ -91,7 +91,7 @@ class FilterScreen extends StatelessWidget {
 
         actions: [
           TextButton(
-            onPressed: controller.reset,
+            onPressed: filterCtrl.reset,
             child: Text(
               "Reset",
               style: TextStyle(
@@ -129,12 +129,12 @@ class FilterScreen extends StatelessWidget {
 
                         children: [1, 2, 3, 5, 10].map((km) {
                           final selected =
-                              controller.selectedDistanceKm.value ==
+                              filterCtrl.selectedDistanceKm.value ==
                               km.toDouble();
 
                           return GestureDetector(
                             onTap: () {
-                              controller.selectedDistanceKm.value = km
+                              filterCtrl.selectedDistanceKm.value = km
                                   .toDouble();
                             },
 
@@ -214,12 +214,12 @@ class FilterScreen extends StatelessWidget {
 
                     /// CATEGORY
                     Obx(() {
-                      final categories = controller.categoriesData;
+                      final categories = filterCtrl.categoriesData;
                       final selectedCategory =
-                          controller.selectedCategory.value;
+                          filterCtrl.selectedCategory.value;
                       final selectedSubCategory =
-                          controller.selectedSubCategory.value;
-                      final selectedType = controller.selectedType.value;
+                          filterCtrl.selectedSubCategory.value;
+                      final selectedType = filterCtrl.selectedType.value;
 
                       final selectedCatObj =
                           categories
@@ -336,10 +336,10 @@ class FilterScreen extends StatelessWidget {
                                 text: cat['name'],
                                 selected: selected,
                                 onTap: () {
-                                  controller.selectedCategory.value =
+                                  filterCtrl.selectedCategory.value =
                                       cat['name'];
-                                  controller.selectedSubCategory.value = '';
-                                  controller.selectedType.value = '';
+                                  filterCtrl.selectedSubCategory.value = '';
+                                  filterCtrl.selectedType.value = '';
                                 },
                               );
                             }).toList(),
@@ -360,9 +360,9 @@ class FilterScreen extends StatelessWidget {
                                   text: sub['name'],
                                   selected: selected,
                                   onTap: () {
-                                    controller.selectedSubCategory.value =
+                                    filterCtrl.selectedSubCategory.value =
                                         sub['name'];
-                                    controller.selectedType.value = '';
+                                    filterCtrl.selectedType.value = '';
                                   },
                                 );
                               }).toList(),
@@ -382,7 +382,7 @@ class FilterScreen extends StatelessWidget {
                                   text: type['name'],
                                   selected: selected,
                                   onTap: () {
-                                    controller.selectedType.value =
+                                    filterCtrl.selectedType.value =
                                         type['name'];
                                   },
                                 );
@@ -435,21 +435,21 @@ class FilterScreen extends StatelessWidget {
 
                         child: RangeSlider(
                           values: RangeValues(
-                            controller.minPrice.value,
-                            controller.maxPrice.value,
+                            filterCtrl.minPrice.value,
+                            filterCtrl.maxPrice.value,
                           ),
 
                           min: 0,
                           max: 5000,
 
                           labels: RangeLabels(
-                            controller.minPrice.value.toInt().toString(),
-                            controller.maxPrice.value.toInt().toString(),
+                            filterCtrl.minPrice.value.toInt().toString(),
+                            filterCtrl.maxPrice.value.toInt().toString(),
                           ),
 
                           onChanged: (values) {
-                            controller.minPrice.value = values.start;
-                            controller.maxPrice.value = values.end;
+                            filterCtrl.minPrice.value = values.start;
+                            filterCtrl.maxPrice.value = values.end;
                           },
                         ),
                       ),
@@ -470,7 +470,7 @@ class FilterScreen extends StatelessWidget {
                           ),
 
                           Text(
-                            "₹${controller.minPrice.value.toInt()} - ₹${controller.maxPrice.value.toInt()}",
+                            "₹${filterCtrl.minPrice.value.toInt()} - ₹${filterCtrl.maxPrice.value.toInt()}",
 
                             style: TextStyle(
                               color: Theme.of(context).colorScheme.primary,
@@ -506,12 +506,12 @@ class FilterScreen extends StatelessWidget {
                         spacing: 10,
                         runSpacing: 10,
                         children: conditions.map((condition) {
-                          final selected = controller.selectedConditions
+                          final selected = filterCtrl.selectedConditions
                               .contains(condition['title']);
                           return GestureDetector(
                             onTap: () {
-                              controller.toggleItem(
-                                controller.selectedConditions,
+                              filterCtrl.toggleItem(
+                                filterCtrl.selectedConditions,
                                 condition['title'].toString(),
                               );
                             },
@@ -579,11 +579,11 @@ class FilterScreen extends StatelessWidget {
                     Obx(
                       () => Column(
                         children: sortOptions.map((e) {
-                          final selected = controller.selectedSort.value == e;
+                          final selected = filterCtrl.selectedSort.value == e;
 
                           return GestureDetector(
                             onTap: () {
-                              controller.selectedSort.value = e;
+                              filterCtrl.selectedSort.value = e;
                             },
 
                             child: Container(
@@ -677,16 +677,14 @@ class FilterScreen extends StatelessWidget {
                   style: ElevatedButton.styleFrom(
                     elevation: 0,
                     backgroundColor: AppColors.primaryDark,
-
                     shape: RoundedRectangleBorder(
                       borderRadius: BorderRadius.circular(18),
                     ),
                   ),
 
                   onPressed: () {
-                    // final homeCtrl = Get.put(HomeController());
-                    // homeCtrl.applyFilters();
-                    Get.back(result: controller);
+                    filterCtrl.applyFilters();
+                    Get.back(result: filterCtrl);
                   },
 
                   icon: const Icon(

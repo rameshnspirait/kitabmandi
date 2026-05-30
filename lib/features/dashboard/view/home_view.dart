@@ -1191,78 +1191,83 @@ class AllListingsScreen extends StatelessWidget {
           );
         }
 
-        return RefreshIndicator(
-          color: Colors.green,
-          backgroundColor: isDark ? const Color(0xFF171B22) : Colors.white,
-          onRefresh: () async {
-            homeCtrl.fetchAllListings();
-            await Future.delayed(const Duration(milliseconds: 1200));
-          },
+        return Obx(
+          () => RefreshIndicator(
+            color: Colors.green,
+            backgroundColor: isDark ? const Color(0xFF171B22) : Colors.white,
 
-          child: homeCtrl.allListings.isEmpty
-              ? ListView(
-                  physics: const AlwaysScrollableScrollPhysics(),
+            onRefresh: () async {
+              await homeCtrl.fetchAllListings();
 
-                  children: [
-                    SizedBox(height: Get.height * 0.35),
+              /// 🔥 IMPORTANT
+              homeCtrl.applyAllFilters();
+            },
 
-                    Center(
-                      child: Text(
-                        "No Listings Found 😔",
-                        style: TextStyle(
-                          color: primaryText,
-                          fontWeight: FontWeight.w600,
-                          fontSize: responsiveText(
-                            context,
-                            mobile: 16,
-                            tablet: 18,
+            child: homeCtrl.filteredListings.isEmpty
+                ? ListView(
+                    physics: const AlwaysScrollableScrollPhysics(),
+                    children: [
+                      SizedBox(height: Get.height * 0.35),
+
+                      Center(
+                        child: Text(
+                          "No Listings Found 😔",
+                          style: TextStyle(
+                            color: primaryText,
+                            fontWeight: FontWeight.w600,
+                            fontSize: responsiveText(
+                              context,
+                              mobile: 16,
+                              tablet: 18,
+                            ),
                           ),
                         ),
                       ),
-                    ),
-                  ],
-                )
-              : LayoutBuilder(
-                  builder: (context, constraints) {
-                    final width = constraints.maxWidth;
+                    ],
+                  )
+                : LayoutBuilder(
+                    builder: (context, constraints) {
+                      final width = constraints.maxWidth;
 
-                    int crossAxisCount = 2;
+                      int crossAxisCount = 2;
 
-                    if (width >= 1200) {
-                      crossAxisCount = 5;
-                    } else if (width >= 900) {
-                      crossAxisCount = 4;
-                    } else if (width >= 600) {
-                      crossAxisCount = 3;
-                    }
+                      if (width >= 1200) {
+                        crossAxisCount = 5;
+                      } else if (width >= 900) {
+                        crossAxisCount = 4;
+                      } else if (width >= 600) {
+                        crossAxisCount = 3;
+                      }
 
-                    return GridView.builder(
-                      padding: const EdgeInsets.fromLTRB(16, 12, 16, 24),
+                      return GridView.builder(
+                        padding: const EdgeInsets.fromLTRB(16, 12, 16, 24),
 
-                      physics: const AlwaysScrollableScrollPhysics(
-                        parent: BouncingScrollPhysics(),
-                      ),
+                        physics: const AlwaysScrollableScrollPhysics(
+                          parent: BouncingScrollPhysics(),
+                        ),
 
-                      gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-                        crossAxisCount: crossAxisCount,
-                        crossAxisSpacing: 14,
-                        mainAxisSpacing: 14,
-                        mainAxisExtent: width >= 600 ? 320 : 300,
-                      ),
+                        gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+                          crossAxisCount: crossAxisCount,
+                          crossAxisSpacing: 14,
+                          mainAxisSpacing: 14,
+                          mainAxisExtent: width >= 600 ? 320 : 300,
+                        ),
 
-                      itemCount: homeCtrl.allListings.length,
+                        /// ✅ USE FILTERED LIST
+                        itemCount: homeCtrl.filteredListings.length,
 
-                      itemBuilder: (_, index) {
-                        final book = homeCtrl.allListings[index];
+                        itemBuilder: (_, index) {
+                          final book = homeCtrl.filteredListings[index];
 
-                        return SizedBox(
-                          width: double.infinity,
-                          child: ListingGridCard(listingModel: book),
-                        );
-                      },
-                    );
-                  },
-                ),
+                          return SizedBox(
+                            width: double.infinity,
+                            child: ListingGridCard(listingModel: book),
+                          );
+                        },
+                      );
+                    },
+                  ),
+          ),
         );
       }),
     );
