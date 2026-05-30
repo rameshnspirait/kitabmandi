@@ -102,13 +102,11 @@ class FilterScreen extends StatelessWidget {
         actions: [
           TextButton(
             onPressed: controller.reset,
-
             child: Text(
               "Reset",
-
               style: TextStyle(
-                color: AppColors.primaryDark,
-                fontWeight: FontWeight.w600,
+                color: Theme.of(context).colorScheme.primary, // ✅ dynamic
+                fontWeight: FontWeight.bold,
                 fontSize: responsiveText(context, mobile: 13, tablet: 14),
               ),
             ),
@@ -130,13 +128,10 @@ class FilterScreen extends StatelessWidget {
 
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
-
                   children: [
                     /// DISTANCE
                     _sectionTitle(context, "Distance", primaryText),
-
                     const SizedBox(height: 12),
-
                     Obx(
                       () => Wrap(
                         spacing: 10,
@@ -230,7 +225,6 @@ class FilterScreen extends StatelessWidget {
                     /// CATEGORY
                     Obx(() {
                       final categories = controller.categoriesData;
-
                       final selectedCategory =
                           controller.selectedCategory.value;
                       final selectedSubCategory =
@@ -257,9 +251,7 @@ class FilterScreen extends StatelessWidget {
                               (e) => e['name'] == selectedSubCategory,
                             )
                           : null;
-
                       final types = selectedSubObj?['children'] ?? [];
-
                       Widget buildChip({
                         required String text,
                         required bool selected,
@@ -365,7 +357,7 @@ class FilterScreen extends StatelessWidget {
 
                           const SizedBox(height: 18),
 
-                          /// 🔹 SUB CATEGORY
+                          ///  SUB CATEGORY
                           if (subCategories.isNotEmpty) ...[
                             sectionHeader("Sub Category"),
                             Wrap(
@@ -374,7 +366,6 @@ class FilterScreen extends StatelessWidget {
                               children: subCategories.map<Widget>((sub) {
                                 final selected =
                                     selectedSubCategory == sub['name'];
-
                                 return buildChip(
                                   text: sub['name'],
                                   selected: selected,
@@ -389,7 +380,7 @@ class FilterScreen extends StatelessWidget {
                             const SizedBox(height: 18),
                           ],
 
-                          /// 🔹 TYPE
+                          ///  TYPE
                           if (types.isNotEmpty) ...[
                             sectionHeader("Type"),
                             Wrap(
@@ -397,7 +388,6 @@ class FilterScreen extends StatelessWidget {
                               runSpacing: 10,
                               children: types.map<Widget>((type) {
                                 final selected = selectedType == type['name'];
-
                                 return buildChip(
                                   text: type['name'],
                                   selected: selected,
@@ -462,7 +452,6 @@ class FilterScreen extends StatelessWidget {
                         children: [
                           Text(
                             "₹0",
-
                             style: TextStyle(
                               color: primaryText,
                               fontWeight: FontWeight.w600,
@@ -474,9 +463,8 @@ class FilterScreen extends StatelessWidget {
                             "₹${controller.minPrice.value.toInt()} - ₹${controller.maxPrice.value.toInt()}",
 
                             style: TextStyle(
-                              color: AppColors.primaryDark,
+                              color: Theme.of(context).colorScheme.primary,
                               fontWeight: FontWeight.w700,
-
                               fontSize: responsiveText(
                                 context,
                                 mobile: 14,
