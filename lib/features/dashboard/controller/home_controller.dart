@@ -89,18 +89,18 @@ class HomeController extends GetxController {
     try {
       isLoading.value = true;
 
-      /// 🔥 Fetch MORE data (important)
+      /// Fetch MORE data (important)
       final snapshot = await _firestore
           .collection("listings")
           .orderBy("createdAt", descending: true)
-          .limit(100) // 👈 NOT 20
+          .limit(100) //  NOT 20
           .get();
 
       final all = snapshot.docs
           .map((doc) => ListingModel.fromMap(doc.data(), doc.id))
           .toList();
 
-      /// ✅ Step 1: Filter within 5 KM
+      /// Step 1: Filter within 5 KM
       final nearby = all.where((item) {
         final distance = calculateDistance(
           sellerLat: item.lat,
@@ -109,10 +109,10 @@ class HomeController extends GetxController {
         return distance <= 5.0;
       }).toList();
 
-      /// ✅ Step 2: Sort by creation date (desc)
+      /// Step 2: Sort by creation date (desc)
       nearby.sort((a, b) => b.createdAt!.compareTo(a.createdAt!));
 
-      /// ✅ Step 3: Take top 20 OR all if less
+      /// Step 3: Take top 20 OR all if less
       if (nearby.length > 20) {
         popularListingNearYou.value = nearby.take(20).toList();
       } else {
@@ -161,7 +161,7 @@ class HomeController extends GetxController {
       return distance <= radius;
     }).toList();
 
-    /// ✅ Sort by nearest (OLX style)
+    /// Sort by nearest (OLX style)
     nearby.sort((a, b) {
       final d1 = calculateDistance(sellerLat: a.lat, sellerLong: a.long);
 

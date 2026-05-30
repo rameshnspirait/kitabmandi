@@ -107,7 +107,7 @@ class FilterScreen extends StatelessWidget {
               "Reset",
 
               style: TextStyle(
-                color: AppColors.secondaryDark,
+                color: AppColors.primaryDark,
                 fontWeight: FontWeight.w600,
                 fontSize: responsiveText(context, mobile: 13, tablet: 14),
               ),
@@ -156,19 +156,19 @@ class FilterScreen extends StatelessWidget {
                             child: AnimatedContainer(
                               duration: const Duration(milliseconds: 250),
 
-                              width: isTablet ? 130 : 80,
+                              width: isTablet ? 130 : 90,
                               height: isTablet ? 58 : 40,
 
                               decoration: BoxDecoration(
                                 color: selected
-                                    ? const Color(0xFF5DD65D)
+                                    ? AppColors.primaryDark
                                     : cardColor,
 
                                 borderRadius: BorderRadius.circular(16),
 
                                 border: Border.all(
                                   color: selected
-                                      ? Colors.transparent
+                                      ? AppColors.primaryLight
                                       : borderColor,
                                 ),
                               ),
@@ -177,20 +177,25 @@ class FilterScreen extends StatelessWidget {
                                 mainAxisAlignment: MainAxisAlignment.center,
 
                                 children: [
-                                  Text(
-                                    "$km km",
+                                  Padding(
+                                    padding: const EdgeInsets.symmetric(
+                                      horizontal: 8.0,
+                                    ),
+                                    child: Text(
+                                      "$km km",
 
-                                    style: TextStyle(
-                                      color: selected
-                                          ? Colors.white
-                                          : primaryText,
+                                      style: TextStyle(
+                                        color: selected
+                                            ? Colors.white
+                                            : primaryText,
 
-                                      fontWeight: FontWeight.w700,
+                                        fontWeight: FontWeight.w700,
 
-                                      fontSize: responsiveText(
-                                        context,
-                                        mobile: 14,
-                                        tablet: 16,
+                                        fontSize: responsiveText(
+                                          context,
+                                          mobile: 14,
+                                          tablet: 16,
+                                        ),
                                       ),
                                     ),
                                   ),
@@ -209,7 +214,7 @@ class FilterScreen extends StatelessWidget {
                                       child: const Icon(
                                         Icons.check,
                                         size: 14,
-                                        color: Color(0xFF5DD65D),
+                                        color: AppColors.primaryDark,
                                       ),
                                     ),
                                   ],
@@ -220,7 +225,6 @@ class FilterScreen extends StatelessWidget {
                         }).toList(),
                       ),
                     ),
-
                     const SizedBox(height: 24),
 
                     /// CATEGORY
@@ -266,27 +270,55 @@ class FilterScreen extends StatelessWidget {
                           child: AnimatedContainer(
                             duration: const Duration(milliseconds: 250),
                             padding: const EdgeInsets.symmetric(
-                              horizontal: 14,
+                              horizontal: 12,
                               vertical: 12,
                             ),
                             decoration: BoxDecoration(
                               color: selected
-                                  ? Colors.green.withOpacity(0.12)
+                                  ? AppColors.primaryDark
                                   : cardColor,
                               borderRadius: BorderRadius.circular(18),
                               border: Border.all(
-                                color: selected ? Colors.green : borderColor,
+                                color: selected
+                                    ? AppColors.primaryLight
+                                    : borderColor,
                                 width: selected ? 1.4 : 1,
                               ),
                             ),
-                            child: Text(
-                              text,
-                              textAlign: TextAlign.center,
-                              style: TextStyle(
-                                color: selected ? Colors.green : primaryText,
-                                fontWeight: FontWeight.w600,
-                                fontSize: 13.5,
-                              ),
+                            child: Row(
+                              mainAxisSize: MainAxisSize.min,
+                              mainAxisAlignment: MainAxisAlignment.center,
+                              children: [
+                                Text(
+                                  text,
+                                  textAlign: TextAlign.center,
+                                  style: TextStyle(
+                                    color: selected
+                                        ? AppColors.white
+                                        : primaryText,
+                                    fontWeight: FontWeight.w600,
+                                    fontSize: 13.5,
+                                  ),
+                                ),
+                                if (selected) ...[
+                                  const SizedBox(width: 8),
+
+                                  Container(
+                                    width: 20,
+                                    height: 20,
+                                    decoration: const BoxDecoration(
+                                      shape: BoxShape.circle,
+                                      color: Colors.white,
+                                    ),
+
+                                    child: const Icon(
+                                      Icons.check,
+                                      size: 14,
+                                      color: AppColors.primaryDark,
+                                    ),
+                                  ),
+                                ],
+                              ],
                             ),
                           ),
                         );
@@ -390,14 +422,14 @@ class FilterScreen extends StatelessWidget {
                     Obx(
                       () => SliderTheme(
                         data: SliderTheme.of(context).copyWith(
-                          activeTrackColor: Colors.green.shade400,
+                          activeTrackColor: AppColors.primaryDark,
                           inactiveTrackColor: isDark
                               ? Colors.white10
                               : Colors.black12,
 
-                          thumbColor: Colors.green.shade400,
+                          thumbColor: AppColors.primaryDark,
 
-                          overlayColor: Colors.green.withOpacity(0.12),
+                          overlayColor: AppColors.primaryLight.withOpacity(0.2),
 
                           trackHeight: 5,
 
@@ -442,7 +474,7 @@ class FilterScreen extends StatelessWidget {
                             "₹${controller.minPrice.value.toInt()} - ₹${controller.maxPrice.value.toInt()}",
 
                             style: TextStyle(
-                              color: Colors.green.shade400,
+                              color: AppColors.primaryDark,
                               fontWeight: FontWeight.w700,
 
                               fontSize: responsiveText(
@@ -455,7 +487,6 @@ class FilterScreen extends StatelessWidget {
 
                           Text(
                             "₹5000",
-
                             style: TextStyle(
                               color: primaryText,
                               fontWeight: FontWeight.w600,
@@ -470,18 +501,15 @@ class FilterScreen extends StatelessWidget {
 
                     /// CONDITION
                     _sectionTitle(context, "Condition", primaryText),
-
                     const SizedBox(height: 12),
 
                     Obx(
                       () => Wrap(
                         spacing: 10,
                         runSpacing: 10,
-
                         children: conditions.map((condition) {
                           final selected = controller.selectedConditions
                               .contains(condition['title']);
-
                           return GestureDetector(
                             onTap: () {
                               controller.toggleItem(
@@ -492,29 +520,24 @@ class FilterScreen extends StatelessWidget {
 
                             child: AnimatedContainer(
                               duration: const Duration(milliseconds: 250),
-
                               padding: const EdgeInsets.symmetric(
                                 horizontal: 16,
                                 vertical: 13,
                               ),
-
                               decoration: BoxDecoration(
                                 color: selected
-                                    ? Colors.green.withOpacity(
-                                        isDark ? 0.15 : 0.08,
-                                      )
+                                    ? AppColors.primaryDark
                                     : cardColor,
-
                                 borderRadius: BorderRadius.circular(16),
-
                                 border: Border.all(
-                                  color: selected ? Colors.green : borderColor,
+                                  color: selected
+                                      ? AppColors.primaryLight
+                                      : borderColor,
                                 ),
                               ),
 
                               child: Row(
                                 mainAxisSize: MainAxisSize.min,
-
                                 children: [
                                   Icon(
                                     condition['icon'] as IconData,
@@ -528,7 +551,9 @@ class FilterScreen extends StatelessWidget {
                                     condition['title'].toString(),
 
                                     style: TextStyle(
-                                      color: primaryText,
+                                      color: selected
+                                          ? Colors.white
+                                          : primaryText,
                                       fontWeight: FontWeight.w600,
 
                                       fontSize: responsiveText(
@@ -579,7 +604,7 @@ class FilterScreen extends StatelessWidget {
 
                                       border: Border.all(
                                         color: selected
-                                            ? Colors.green.shade400
+                                            ? AppColors.primaryDark
                                             : secondaryText,
                                         width: 2,
                                       ),
@@ -593,7 +618,7 @@ class FilterScreen extends StatelessWidget {
 
                                               decoration: BoxDecoration(
                                                 shape: BoxShape.circle,
-                                                color: Colors.green.shade400,
+                                                color: AppColors.primaryDark,
                                               ),
                                             ),
                                           )
