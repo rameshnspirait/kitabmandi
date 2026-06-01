@@ -179,16 +179,10 @@ class AuthController extends GetxController {
         "provider": isGoogleUser.value ? "google" : "email",
         "createdAt": FieldValue.serverTimestamp(),
       });
-
-      /// OPTIONAL: refresh user data
       await fetchUserData();
-      // AppSnackbar.success("Signup successful 🚀");
       clearAllFields();
       isLogin.value = true;
       await locationController.initLocation(isNewUser: true);
-
-      /// 🚀 NAVIGATE AFTER EVERYTHING DONE
-      Get.offAllNamed(AppRoutes.wrapper);
       isGoogleUser.value = false;
     } on FirebaseAuthException catch (e) {
       AppSnackbar.error(_handleAuthError(e));

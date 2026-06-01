@@ -838,21 +838,43 @@ class _AllCategoriesScreenState extends State<AllCategoriesScreen> {
     final data = await rootBundle.loadString('assets/data/categories.json');
     final decoded = json.decode(data);
 
+    final loadedCategories = decoded['categories'];
+
+    /// 🔥 DEFAULT SELECTION WHEN COMING FROM "SEE ALL"
+    if (filterCtrl.selectedCategory.value.isEmpty &&
+        loadedCategories.isNotEmpty) {
+      ///  MAIN CATEGORY → FIRST
+      filterCtrl.selectedCategory.value = loadedCategories[0]['name'];
+
+      final sub = loadedCategories[0]['subcategories'] ?? [];
+
+      ///  SUB CATEGORY → FIRST
+      if (sub.isNotEmpty) {
+        filterCtrl.selectedSubCategory.value = sub[0]['name'];
+      }
+
+      /// ❌ CHILD → KEEP EMPTY
+      filterCtrl.selectedType.value = '';
+    }
+
     setState(() {
-      categories = decoded['categories'];
+      categories = loadedCategories;
     });
   }
 
   int getMainIndex() {
-    return categories
-        .indexWhere((c) => c['name'] == filterCtrl.selectedCategory.value)
-        .clamp(0, categories.length - 1);
+    final index = categories.indexWhere(
+      (c) => c['name'] == filterCtrl.selectedCategory.value,
+    );
+    return index == -1 ? 0 : index;
   }
 
   int getSubIndex(List subCategories) {
-    return subCategories
-        .indexWhere((s) => s['name'] == filterCtrl.selectedSubCategory.value)
-        .clamp(0, subCategories.length - 1);
+    final index = subCategories.indexWhere(
+      (s) => s['name'] == filterCtrl.selectedSubCategory.value,
+    );
+
+    return index == -1 ? 0 : index;
   }
 
   IconData getIcon(String name) {
