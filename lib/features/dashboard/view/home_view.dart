@@ -10,7 +10,6 @@ import 'package:kitab_mandi/features/dashboard/controller/home_controller.dart';
 import 'package:kitab_mandi/features/dashboard/widget/home_listing_card_shimmer.dart';
 import 'package:kitab_mandi/features/dashboard/widget/home_listing_card_widget.dart';
 import 'package:kitab_mandi/features/dashboard/widget/home_location_appbar_widget.dart';
-import 'package:kitab_mandi/routes/app_routes.dart';
 import 'package:kitab_mandi/widgets/app_cached_image_network.dart';
 import 'package:shimmer/shimmer.dart';
 
